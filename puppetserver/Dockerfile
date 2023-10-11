@@ -1,27 +1,27 @@
-ARG build_type=edge
-ARG UBUNTU_CODENAME=bionic
+ARG build_type=release
+ARG UBUNTU_CODENAME=jammy
 
 ######################################################
 # base
 ######################################################
 
-FROM ubuntu:18.04 as base
+FROM ubuntu:22.04 as base
 
 ARG PACKAGES=ca-certificates\ git
-ARG DUMB_INIT_VERSION="1.2.2"
+ARG DUMB_INIT_VERSION="1.2.5"
 
-LABEL org.label-schema.maintainer="Puppet Release Team <release@puppet.com>" \
-      org.label-schema.vendor="Puppet" \
+LABEL org.label-schema.maintainer="Voxpupuli Team <info@voxpupuli.org>" \
+      org.label-schema.vendor="Voxpupuli" \
       org.label-schema.url="https://github.com/puppetlabs/puppetserver" \
       org.label-schema.license="Apache-2.0" \
       org.label-schema.vcs-url="https://github.com/puppetlabs/puppetserver" \
       org.label-schema.schema-version="1.0" \
       org.label-schema.dockerfile="/Dockerfile"
 
-ENV PUPPERWARE_ANALYTICS_TRACKING_ID="UA-132486246-4" \
-    PUPPERWARE_ANALYTICS_APP_NAME="puppetserver" \
-    PUPPERWARE_ANALYTICS_ENABLED=false \
-    PUPPETSERVER_JAVA_ARGS="-Xms512m -Xmx512m" \
+# ENV PUPPERWARE_ANALYTICS_TRACKING_ID="UA-132486246-4" \
+#     PUPPERWARE_ANALYTICS_APP_NAME="puppetserver" \
+ENV PUPPERWARE_ANALYTICS_ENABLED=false \
+    PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
     PATH=/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:$PATH \
     SSLDIR=/etc/puppetlabs/puppet/ssl \
     LOGDIR=/var/log/puppetlabs/puppetserver \
@@ -49,10 +49,10 @@ CMD ["foreground"]
 
 ADD https://github.com/Yelp/dumb-init/releases/download/v"$DUMB_INIT_VERSION"/dumb-init_"$DUMB_INIT_VERSION"_amd64.deb /
 
-COPY docker/puppetserver/docker-entrypoint.sh \
-     docker/puppetserver/healthcheck.sh \
-      /
-COPY docker/puppetserver/docker-entrypoint.d /docker-entrypoint.d
+COPY docker-entrypoint.sh \
+     healthcheck.sh \
+     /
+COPY docker-entrypoint.d /docker-entrypoint.d
 # k8s uses livenessProbe, startupProbe, readinessProbe and ignores HEALTHCHECK
 HEALTHCHECK --interval=20s --timeout=15s --retries=12 --start-period=3m CMD ["/healthcheck.sh"]
 
@@ -64,52 +64,9 @@ RUN chmod +x /docker-entrypoint.sh /healthcheck.sh /docker-entrypoint.d/*.sh && 
     dpkg -i dumb-init_"$DUMB_INIT_VERSION"_amd64.deb && \
     rm dumb-init_"$DUMB_INIT_VERSION"_amd64.deb
 
-######################################################
-# edge (build from source)
-######################################################
-
-FROM ubuntu:18.04 as build
-
-ENV LANG="en_US.UTF-8"
-
-ADD https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein /usr/local/bin/lein
-
-# hadolint ignore=DL3008,DL3028
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-            language-pack-en \
-            openjdk-8-jdk-headless \
-            curl \
-            git \
-            ruby \
-            ruby-dev \
-            g++ \
-            make && \
-    git config --global user.name "Puppet Release Team" && \
-    git config --global user.email "release@puppet.com" && \
-    chmod 0755 /usr/local/bin/lein && \
-    /usr/local/bin/lein && \
-    gem install --no-doc public_suffix -v 4.0.7 && \
-    gem install --no-doc bundler fpm
-
-COPY . /puppetserver
-WORKDIR /puppetserver
-
-# Fixes a linux 5.6 - 5.10 kernel bug around copy_file_range syscall
-# https://github.com/docker/for-linux/issues/1015
-ENV RUBYOPT=-r/puppetserver/docker/ruby-docker-copy-patch
-
-RUN lein clean && \
-    lein install && \
-    EZBAKE_ALLOW_UNREPRODUCIBLE_BUILDS=true EZBAKE_NODEPLOY=true COW=base-bionic-amd64.cow MOCK='' GEM_SOURCE=https://rubygems.org lein with-profile ezbake ezbake local-build && \
-    mv /puppetserver/output/deb/bionic/*/*.deb /puppetserver.deb
-
 FROM base as edge
 
-COPY --from=build /puppetserver.deb /puppetserver.deb
-
 ARG UBUNTU_CODENAME
-ARG install_path=/puppetserver.deb
 ARG deb_uri=http://nightlies.puppet.com/apt/puppet7-nightly-release-$UBUNTU_CODENAME.deb
 
 ######################################################
@@ -139,15 +96,15 @@ ARG install_path
 ARG deb_uri
 # used by entrypoint to submit metrics to Google Analytics;
 # published images should use "production" for this build_arg
-ARG pupperware_analytics_stream="dev"
+# ARG pupperware_analytics_stream="dev"
 
 # hadolint ignore=DL3020
 ADD $deb_uri /puppet.deb
 
 # hadolint ignore=DL3008,DL3028
 RUN dpkg -i /puppet.deb && \
-    rm /puppet.deb && \
-    apt-get update && \
+    rm /puppet.deb
+RUN apt-get update && \
     apt-get install --no-install-recommends -y $install_path puppetdb-termini && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
@@ -157,21 +114,21 @@ RUN dpkg -i /puppet.deb && \
     cp -pr /opt/puppetlabs/server/data/puppetserver /var/tmp && \
     rm -rf /var/tmp/puppet/ssl
 
-COPY docker/puppetserver/puppetserver /etc/default/puppetserver
-COPY docker/puppetserver/logback.xml \
-     docker/puppetserver/request-logging.xml \
+COPY puppetserver /etc/default/puppetserver
+COPY logback.xml \
+     request-logging.xml \
      /etc/puppetlabs/puppetserver/
-COPY docker/puppetserver/puppetserver.conf /etc/puppetlabs/puppetserver/conf.d/
-COPY docker/puppetserver/puppetdb.conf /var/tmp/puppet/
+COPY puppetserver.conf /etc/puppetlabs/puppetserver/conf.d/
+COPY puppetdb.conf /var/tmp/puppet/
 
 # dynamic LABELs and ENV vars placed lower for the sake of Docker layer caching
 # these are specific to analytics
-ENV PUPPERWARE_ANALYTICS_STREAM="$pupperware_analytics_stream" \
-    PUPPET_SERVER_VERSION="$version"
+# ENV PUPPERWARE_ANALYTICS_STREAM="$pupperware_analytics_stream" \
+#     PUPPET_SERVER_VERSION="$version"
 
 LABEL org.label-schema.name="Puppet Server ($build_type)" \
       org.label-schema.version="$version" \
       org.label-schema.vcs-ref="$vcs_ref" \
       org.label-schema.build-date="$build_date"
 
-COPY docker/puppetserver/Dockerfile /
+COPY Dockerfile /

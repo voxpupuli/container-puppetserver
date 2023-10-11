@@ -10,11 +10,11 @@ FROM ubuntu:22.04 as base
 ARG PACKAGES=ca-certificates\ git
 ARG DUMB_INIT_VERSION="1.2.5"
 
-LABEL org.label-schema.maintainer="Voxpupuli Team <info@voxpupuli.org>" \
-      org.label-schema.vendor="Voxpupuli" \
-      org.label-schema.url="https://github.com/puppetlabs/puppetserver" \
+LABEL org.label-schema.maintainer="<voxpupuli@groups.io>" \
+      org.label-schema.vendor="Vox Pupuli" \
+      org.label-schema.url="https://github.com/voxpupuli/puppetserver-docker" \
       org.label-schema.license="Apache-2.0" \
-      org.label-schema.vcs-url="https://github.com/puppetlabs/puppetserver" \
+      org.label-schema.vcs-url="https://github.com/voxpupuli/puppetserver-docker" \
       org.label-schema.schema-version="1.0" \
       org.label-schema.dockerfile="/Dockerfile"
 

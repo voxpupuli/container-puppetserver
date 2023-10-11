@@ -77,7 +77,6 @@ FROM base as release
 
 ARG version
 ARG UBUNTU_CODENAME
-ARG install_path=puppetserver="$version"-1"$UBUNTU_CODENAME"
 ARG deb_uri=https://apt.puppetlabs.com/puppet7-release-$UBUNTU_CODENAME.deb
 
 ######################################################
@@ -92,7 +91,6 @@ ARG build_type
 ARG vcs_ref
 ARG version
 ARG build_date
-ARG install_path
 ARG deb_uri
 # used by entrypoint to submit metrics to Google Analytics;
 # published images should use "production" for this build_arg
@@ -105,7 +103,7 @@ ADD $deb_uri /puppet.deb
 RUN dpkg -i /puppet.deb && \
     rm /puppet.deb
 RUN apt-get update && \
-    apt-get install --no-install-recommends -y $install_path puppetdb-termini && \
+    apt-get install --no-install-recommends -y puppetserver puppetdb-termini && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     gem install --no-doc r10k && \

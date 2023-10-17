@@ -9,19 +9,17 @@ FROM ubuntu:22.04 as base
 
 ARG PACKAGES=ca-certificates\ git
 ARG DUMB_INIT_VERSION="1.2.5"
+ARG TARGETARCH
 
 LABEL org.label-schema.maintainer="Voxpupuli Team <info@voxpupuli.org>" \
       org.label-schema.vendor="Voxpupuli" \
-      org.label-schema.url="https://github.com/puppetlabs/puppetserver" \
+      org.label-schema.url="https://github.com/voxpupuli/container-puppetserver" \
       org.label-schema.license="Apache-2.0" \
-      org.label-schema.vcs-url="https://github.com/puppetlabs/puppetserver" \
+      org.label-schema.vcs-url="https://github.com/voxpupuli/container-puppetserver" \
       org.label-schema.schema-version="1.0" \
       org.label-schema.dockerfile="/Dockerfile"
 
-# ENV PUPPERWARE_ANALYTICS_TRACKING_ID="UA-132486246-4" \
-#     PUPPERWARE_ANALYTICS_APP_NAME="puppetserver" \
-ENV PUPPERWARE_ANALYTICS_ENABLED=false \
-    PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
+ENV PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
     PATH=/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:$PATH \
     SSLDIR=/etc/puppetlabs/puppet/ssl \
     LOGDIR=/var/log/puppetlabs/puppetserver \
@@ -47,7 +45,7 @@ EXPOSE 8140
 ENTRYPOINT ["dumb-init", "/docker-entrypoint.sh"]
 CMD ["foreground"]
 
-ADD https://github.com/Yelp/dumb-init/releases/download/v"$DUMB_INIT_VERSION"/dumb-init_"$DUMB_INIT_VERSION"_amd64.deb /
+ADD https://github.com/Yelp/dumb-init/releases/download/v"$DUMB_INIT_VERSION"/dumb-init_"$DUMB_INIT_VERSION"_"$TARGETARCH".deb /
 
 COPY docker-entrypoint.sh \
      healthcheck.sh \
@@ -61,13 +59,8 @@ HEALTHCHECK --interval=20s --timeout=15s --retries=12 --start-period=3m CMD ["/h
 RUN chmod +x /docker-entrypoint.sh /healthcheck.sh /docker-entrypoint.d/*.sh && \
     apt-get update && \
     apt-get install -y --no-install-recommends $PACKAGES && \
-    dpkg -i dumb-init_"$DUMB_INIT_VERSION"_amd64.deb && \
-    rm dumb-init_"$DUMB_INIT_VERSION"_amd64.deb
-
-FROM base as edge
-
-ARG UBUNTU_CODENAME
-ARG deb_uri=http://nightlies.puppet.com/apt/puppet7-nightly-release-$UBUNTU_CODENAME.deb
+    dpkg -i dumb-init_"$DUMB_INIT_VERSION"_"$TARGETARCH".deb && \
+    rm dumb-init_"$DUMB_INIT_VERSION"_"$TARGETARCH".deb
 
 ######################################################
 # release (build from packages)
@@ -75,10 +68,13 @@ ARG deb_uri=http://nightlies.puppet.com/apt/puppet7-nightly-release-$UBUNTU_CODE
 
 FROM base as release
 
-ARG version
+ARG PUPPET_RELEASE
+ENV PUPPET_RELEASE=${PUPPET_RELEASE:-7}
+
+ARG PUPPETSERVER_VERSION
+ENV PUPPETSERVER_VERSION=${PUPPETSERVER_VERSION:-7.14.0}
+
 ARG UBUNTU_CODENAME
-ARG install_path=puppetserver="$version"-1"$UBUNTU_CODENAME"
-ARG deb_uri=https://apt.puppetlabs.com/puppet7-release-$UBUNTU_CODENAME.deb
 
 ######################################################
 # final image
@@ -88,24 +84,18 @@ ARG deb_uri=https://apt.puppetlabs.com/puppet7-release-$UBUNTU_CODENAME.deb
 # hadolint ignore=DL3006
 FROM ${build_type} as final
 
-ARG build_type
 ARG vcs_ref
-ARG version
+ARG build_type
 ARG build_date
-ARG install_path
-ARG deb_uri
-# used by entrypoint to submit metrics to Google Analytics;
-# published images should use "production" for this build_arg
-# ARG pupperware_analytics_stream="dev"
 
-# hadolint ignore=DL3020
-ADD $deb_uri /puppet.deb
+ENV PUPPET_DEB=puppet${PUPPET_RELEASE}-release-${UBUNTU_CODENAME}.deb
+ADD https://apt.puppet.com/${PUPPET_DEB} /${PUPPET_DEB}
 
 # hadolint ignore=DL3008,DL3028
-RUN dpkg -i /puppet.deb && \
-    rm /puppet.deb
+RUN dpkg -i /${PUPPET_DEB} && \
+    rm /${PUPPET_DEB}
 RUN apt-get update && \
-    apt-get install --no-install-recommends -y $install_path puppetdb-termini && \
+    apt-get install --no-install-recommends -y puppetserver=${PUPPETSERVER_VERSION}-1${UBUNTU_CODENAME} puppetdb-termini && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     gem install --no-doc r10k && \
@@ -121,13 +111,8 @@ COPY logback.xml \
 COPY puppetserver.conf /etc/puppetlabs/puppetserver/conf.d/
 COPY puppetdb.conf /var/tmp/puppet/
 
-# dynamic LABELs and ENV vars placed lower for the sake of Docker layer caching
-# these are specific to analytics
-# ENV PUPPERWARE_ANALYTICS_STREAM="$pupperware_analytics_stream" \
-#     PUPPET_SERVER_VERSION="$version"
-
 LABEL org.label-schema.name="Puppet Server ($build_type)" \
-      org.label-schema.version="$version" \
+      org.label-schema.version="$PUPPETSERVER_VERSION" \
       org.label-schema.vcs-ref="$vcs_ref" \
       org.label-schema.build-date="$build_date"
 

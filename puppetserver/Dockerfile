@@ -7,7 +7,7 @@ ARG UBUNTU_CODENAME=jammy
 
 FROM ubuntu:22.04 as base
 
-ARG PACKAGES=ca-certificates\ git
+ARG PACKAGES=ca-certificates\ git\ netbase\ openjdk-17-jre-headless
 ARG DUMB_INIT_VERSION="1.2.5"
 ARG TARGETARCH
 

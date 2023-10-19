@@ -12,7 +12,7 @@ else
   echo "* PUPPETSERVER_HOSTNAME: unset"
   certname=$(cd "${SSLDIR}/certs" && ls *.pem | grep --invert-match ca.pem)
 fi
-echo "* PUPPET_MASTERPORT: '${PUPPET_MASTERPORT}'"
+echo "* PUPPETSERVER_PORT: '${PUPPETSERVER_PORT:-8140}'"
 echo "* Certname: '${certname}'"
 echo "* DNS_ALT_NAMES: '${DNS_ALT_NAMES}'"
 echo "* SSLDIR: '${SSLDIR}'"

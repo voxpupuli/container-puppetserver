@@ -17,26 +17,18 @@ jobs:
       contents: read
       packages: write
     steps:
-      - name: Build Puppetserver 7 container
+      - name: Set variables
+        run: |
+          TAG=${{ github.ref_name }}
+          echo "PUPPET_RELEASE=${TAG:0:1}" >> $GITHUB_ENV
+          echo "PUPPETSERVER_VERSION=${TAG}" >> $GITHUB_ENV
+      - name: Build Puppetserver ${{ env.PUPPETSERVER_VERSION }} container
         uses: voxpupuli/gha-build-and-publish-a-container@v2
         with:
           registry_password: ${{ secrets.GITHUB_TOKEN }}
           build_args: |
-            PUPPET_RELEASE=7
-            PUPPET_VERSION=${{ github.ref_name }}
+            PUPPET_RELEASE=${{ env.PUPPET_RELEASE }}
+            PUPPETSERVER_VERSION=${{ env.PUPPETSERVER_VERSION }}
           build_arch: linux/amd64 #,linux/arm64
           build_context: puppetserver
           buildfile: puppetserver/Dockerfile
-        if: ${{ startsWith(github.ref_name, '7') }}
-
-      - name: Build Puppetserver 8 container
-        uses: voxpupuli/gha-build-and-publish-a-container@v2
-        with:
-          registry_password: ${{ secrets.GITHUB_TOKEN }}
-          build_args: |
-            PUPPET_RELEASE=8
-            PUPPET_VERSION=${{ github.ref_name }}
-          build_arch: linux/amd64 #,linux/arm64
-          build_context: puppetserver
-          buildfile: puppetserver/Dockerfile
-        if: ${{ startsWith(github.ref_name, '8') }}

@@ -41,6 +41,6 @@ jobs:
           build_arch: linux/amd64 #,linux/arm64
           build_context: puppetserver
           buildfile: puppetserver/Dockerfile
-        tags: |
-          ghcr.io/${{ github.repository }}:${{ github.ref_name }}-${{ matrix.release }}
-          ghcr.io/${{ github.repository }}:latest
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}-${{ matrix.release }}
+            ghcr.io/${{ github.repository }}:latest

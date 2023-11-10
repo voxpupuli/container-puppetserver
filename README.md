@@ -65,3 +65,5 @@ For example, `docker run -v $PWD/ca-ssl:/etc/puppetlabs/puppetserver/ca voxpupul
 ## How to build the container
 
 [see here](https://github.com/voxpupuli/crafty/blob/main/docs/how-to-build.md)
+
+## How to Release the container

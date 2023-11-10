@@ -38,7 +38,7 @@ jobs:
           build_args: |
             PUPPET_RELEASE=${{ matrix.release }}
             PUPPETSERVER_VERSION=${{ matrix.version }}
-          build_arch: linux/amd64 #,linux/arm64
+          build_arch: linux/amd64,linux/arm64
           build_context: puppetserver
           buildfile: puppetserver/Dockerfile
           tags: |

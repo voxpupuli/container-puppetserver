@@ -1,12 +1,15 @@
 # Changelog
 
-## [v1.0.0](https://github.com/voxpupuli/container-puppetserver/tree/v1.0.0) (2023-11-10)
+All notable changes to this project will be documented in this file.
+
+## [v1.0.0](https://github.com/voxpupuli/container-puppetserver/tree/v1.0.0) (2023-11-13)
 
 [Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.13.0...v1.0.0)
 
 **Closed issues:**
 
 - Puppetserver container manifest unknown [\#17](https://github.com/voxpupuli/container-puppetserver/issues/17)
+- Puppetserver 8 [\#16](https://github.com/voxpupuli/container-puppetserver/issues/16)
 
 **Merged pull requests:**
 

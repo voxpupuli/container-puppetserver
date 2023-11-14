@@ -62,6 +62,6 @@ If you plan to use the in-server CA, restarting the container can cause the serv
 To prevent this, you can persist the default cadir, `/etc/puppetlabs/puppetserver/ca`.
 For example, `docker run -v $PWD/ca-ssl:/etc/puppetlabs/puppetserver/ca voxpupuli/container-puppetserver:7.13.0`.
 
-## How to build the container
+## How to Release the container
 
-[see here](https://github.com/voxpupuli/crafty/blob/main/docs/how-to-build.md)
+[see here](https://github.com/voxpupuli/crafty/blob/main/docs/how-to-release.md)

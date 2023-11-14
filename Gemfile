@@ -1,11 +1,7 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
 
-gem 'pupperware',
-    :git => 'https://github.com/puppetlabs/pupperware.git',
-    :branch => 'main',
-    :glob => 'gem/*.gemspec'
+source 'https://rubygems.org'
 
-group :test do
-    gem 'rspec'
-    gem 'rspec_junit_formatter'
+group :release do
+  gem 'github_changelog_generator', '~> 1.16.4', require: false
 end

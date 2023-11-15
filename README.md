@@ -9,7 +9,7 @@ This project hosts the Dockerfile and the required scripts to build a Puppet Ser
 You can run a copy of Puppet Server with the following Docker command:
 
 ```bash
-docker run --name puppet --hostname puppet voxpupuli/container-puppetserver:7.13.0
+docker run --name puppet --hostname puppet ghcr.io/voxpupuli/container-puppetserver:v1.0.0-7
 ```
 
 Although it is not strictly necessary to name the container `puppet`, this is
@@ -19,7 +19,7 @@ on that hostname by default.
 If you would like to start the Puppet Server with your own Puppet code, you can
 mount your own directory at `/etc/puppetlabs/code`:
 
-    docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code/ voxpupuli/container-puppetserver:7.13.0
+    docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code/ ghcr.io/voxpupuli/container-puppetserver:v1.0.0-7
 
 For compose file see: [CRAFTY](https://github.com/voxpupuli/crafty/tree/main/puppet/oss)
 
@@ -60,8 +60,12 @@ These scripts will be executed at the end of the entrypoint script, before the s
 
 If you plan to use the in-server CA, restarting the container can cause the server's keys and certificates to change, causing agents and the server to stop trusting each other.
 To prevent this, you can persist the default cadir, `/etc/puppetlabs/puppetserver/ca`.
-For example, `docker run -v $PWD/ca-ssl:/etc/puppetlabs/puppetserver/ca voxpupuli/container-puppetserver:7.13.0`.
+For example, `docker run -v $PWD/ca-ssl:/etc/puppetlabs/puppetserver/ca ghcr.io/voxpupuli/container-puppetserver:v1.0.0-7`.
 
 ## How to Release the container
 
 [see here](https://github.com/voxpupuli/crafty/blob/main/docs/how-to-release.md)
+
+## How to contribute
+
+[see here](https://github.com/voxpupuli/crafty/blob/main/CONTRIBUTING.md)

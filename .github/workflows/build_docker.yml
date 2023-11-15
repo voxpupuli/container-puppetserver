@@ -2,8 +2,6 @@ name: Build and publish a 🛢️ container
 
 on:
   push:
-    paths-ignore:
-      - '.github/**'
     branches:
       - 'main'
     tags:
@@ -39,8 +37,12 @@ jobs:
             PUPPET_RELEASE=${{ matrix.release }}
             PUPPETSERVER_VERSION=${{ matrix.version }}
           build_arch: linux/amd64,linux/arm64
+          docker_username: voxpupulibot
+          docker_password: ${{ secrets.DOCKERHUB_BOT_PASSWORD }}
           build_context: puppetserver
           buildfile: puppetserver/Dockerfile
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.ref_name }}-${{ matrix.release }}
             ghcr.io/${{ github.repository }}:latest
+            docker.io/${{ github.repository }}:${{ github.ref_name }}-${{ matrix.release }}
+            docker.io/${{ github.repository }}:latest

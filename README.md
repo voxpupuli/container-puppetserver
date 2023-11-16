@@ -4,6 +4,17 @@
 [![License](https://img.shields.io/github/license/voxpupuli/container-puppetserver.svg)](https://github.com/voxpupuli/container-puppetserver/blob/main/LICENSE)
 [![CI](https://github.com/voxpupuli/container-puppetserver/actions/workflows/ci.yaml/badge.svg)](https://github.com/voxpupuli/container-puppetserver/actions/workflows/ci.yaml)
 
+---
+
+- [Voxpupuli Puppet Server container](#voxpupuli-puppet-server-container)
+  * [Configuration](#configuration)
+  * [Initialization Scripts](#initialization-scripts)
+  * [Persistance](#persistance)
+  * [How to Release the container](#how-to-release-the-container)
+  * [How to contribute](#how-to-contribute)
+
+---
+
 This project hosts the Dockerfile and the required scripts to build a Puppet Server container image.
 
 You can run a copy of Puppet Server with the following Docker command:

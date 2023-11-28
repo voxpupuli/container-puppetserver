@@ -62,7 +62,7 @@ The following environment variables are supported:
 | **PUPPETDB_SERVER_URLS**                   | The `server_urls` to set in `/etc/puppetlabs/puppet/puppetdb.conf`<br><br>`https://puppetdb:8081`                                                             |
 | **PUPPETDB_HOSTNAME**                      | The DNS name of the puppetdb <br><br> Defaults to `puppetdb`                                                                                                  |
 | **PUPPETDB_SSL_PORT**                      | The TLS port of the puppetdb <br><br> Defaults to `8081`                                                                                                      |
-| **ADDITIONAL_CERTIFICATES**                   | Generate and sign additional certificates                                                                                                                     |
+| **ADDITIONAL_CERTIFICATES**                | Generate and sign additional certificates. Comma-separated list, f.e.: ADDITIONAL_CERTIFICATES="puppetboard,test"                                             |
 
 ## Initialization Scripts
 

@@ -30,12 +30,13 @@ on that hostname by default.
 If you would like to start the Puppet Server with your own Puppet code, you can
 mount your own directory at `/etc/puppetlabs/code`:
 
-    docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code/ ghcr.io/voxpupuli/container-puppetserver:v1.0.0-7
+```bash
+docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code/ ghcr.io/voxpupuli/container-puppetserver:v1.0.0-7
+```
 
 For compose file see: [CRAFTY](https://github.com/voxpupuli/crafty/tree/main/puppet/oss)
 
 You can find out more about Puppet Server in the [official documentation](https://www.puppet.com/docs/puppet/7/server/about_server.html).
-
 
 ## Configuration
 
@@ -61,6 +62,7 @@ The following environment variables are supported:
 | **PUPPETDB_SERVER_URLS**                   | The `server_urls` to set in `/etc/puppetlabs/puppet/puppetdb.conf`<br><br>`https://puppetdb:8081`                                                             |
 | **PUPPETDB_HOSTNAME**                      | The DNS name of the puppetdb <br><br> Defaults to `puppetdb`                                                                                                  |
 | **PUPPETDB_SSL_PORT**                      | The TLS port of the puppetdb <br><br> Defaults to `8081`                                                                                                      |
+| **ADDITIONAL_CERTIFICATES**                   | Generate and sign additional certificates                                                                                                                     |
 
 ## Initialization Scripts
 

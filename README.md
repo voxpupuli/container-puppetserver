@@ -62,6 +62,8 @@ The following environment variables are supported:
 | **PUPPETDB_HOSTNAME**                      | The DNS name of the puppetdb <br><br> Defaults to `puppetdb`                                                                                                  |
 | **PUPPETDB_SSL_PORT**                      | The TLS port of the puppetdb <br><br> Defaults to `8081`                                                                                                      |
 | **PUPPETSERVER_GRAPHITE_EXPORTER_ENABLED** | Activate the graphite exporter. Also needs **PUPPETSERVER_GRAPHITE_HOST** and **PUPPETSERVER_GRAPHITE_PORT**<br><br>  Defaults to `false`                     |
+| **PUPPETSERVER_GRAPHITE_HOST**             | Only used if **PUPPETSERVER_GRAPHITE_EXPORTER_ENABLED** is set to `true`. FQDN or Hostname of the graphite server where puppet should push metrics to. <br><br> Default to `exporter` |
+| **PUPPETSERVER_GRAPHITE_PORT**             | Only used if **PUPPETSERVER_GRAPHITE_EXPORTER_ENABLED** is set to `true`. Port of the graphite server where puppet should push metrics to. <br><br> Default to `9109` |
 | **PUPPETSERVER_ENVIRONMENT_TIMEOUT**       | Configure the environment timeout<br><br> Defaults to `unlimited`                                                                                             |
 
 ## Initialization Scripts

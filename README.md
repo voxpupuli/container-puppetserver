@@ -61,6 +61,8 @@ The following environment variables are supported:
 | **PUPPETDB_SERVER_URLS**                   | The `server_urls` to set in `/etc/puppetlabs/puppet/puppetdb.conf`<br><br>`https://puppetdb:8081`                                                             |
 | **PUPPETDB_HOSTNAME**                      | The DNS name of the puppetdb <br><br> Defaults to `puppetdb`                                                                                                  |
 | **PUPPETDB_SSL_PORT**                      | The TLS port of the puppetdb <br><br> Defaults to `8081`                                                                                                      |
+| **PUPPETSERVER_GRAPHITE_EXPORTER_ENABLED** | Activate the graphite exporter. Also needs **PUPPETSERVER_GRAPHITE_HOST** and **PUPPETSERVER_GRAPHITE_PORT**<br><br>  Defaults to `false`                     |
+| **PUPPETSERVER_ENVIRONMENT_TIMEOUT**       | Configure the environment timeout<br><br> Defaults to `unlimited`                                                                                             |
 
 ## Initialization Scripts
 

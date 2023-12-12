@@ -37,7 +37,9 @@ ENV PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
     PUPPETDB_SERVER_URLS=https://puppetdb:8081 \
     PUPPET_STORECONFIGS_BACKEND="puppetdb" \
     PUPPET_STORECONFIGS=true \
-    PUPPET_REPORTS="puppetdb"
+    PUPPET_REPORTS="puppetdb" \
+    PUPPETSERVER_GRAPHITE_EXPORTER_ENABLED=false \
+    PUPPETSERVER_ENVIRONMENT_TIMEOUT=unlimited
 
 # NOTE: this is just documentation on defaults
 EXPOSE 8140
@@ -51,6 +53,7 @@ COPY docker-entrypoint.sh \
      healthcheck.sh \
      /
 COPY docker-entrypoint.d /docker-entrypoint.d
+COPY metrics.conf.tmpl /metrics.conf.tmpl
 # k8s uses livenessProbe, startupProbe, readinessProbe and ignores HEALTHCHECK
 HEALTHCHECK --interval=20s --timeout=15s --retries=12 --start-period=3m CMD ["/healthcheck.sh"]
 

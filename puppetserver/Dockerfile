@@ -41,7 +41,8 @@ ENV PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
     PUPPETSERVER_GRAPHITE_EXPORTER_ENABLED=false \
     PUPPETSERVER_GRAPHITE_PORT=9109 \
     PUPPETSERVER_GRAPHITE_HOST=exporter \
-    PUPPETSERVER_ENVIRONMENT_TIMEOUT=unlimited
+    PUPPETSERVER_ENVIRONMENT_TIMEOUT=unlimited \
+    PUPPETSERVER_ENABLE_ENV_CACHE_DEL_API=true
 
 # NOTE: this is just documentation on defaults
 EXPOSE 8140
@@ -56,6 +57,7 @@ COPY docker-entrypoint.sh \
      /
 COPY docker-entrypoint.d /docker-entrypoint.d
 COPY metrics.conf.tmpl /metrics.conf.tmpl
+COPY add_cache_del_api_auth_rules.rb /add_cache_del_api_auth_rules.rb
 # k8s uses livenessProbe, startupProbe, readinessProbe and ignores HEALTHCHECK
 HEALTHCHECK --interval=20s --timeout=15s --retries=12 --start-period=3m CMD ["/healthcheck.sh"]
 

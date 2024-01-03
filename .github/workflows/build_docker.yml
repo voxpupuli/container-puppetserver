@@ -42,9 +42,9 @@ jobs:
           build_context: puppetserver
           buildfile: puppetserver/Dockerfile
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.ref_name }}-${{ matrix.release }}
+            ghcr.io/${{ github.repository }}:${{ matrix.version }}-${{ github.ref_name }}
             ghcr.io/${{ github.repository }}:latest
-            docker.io/${{ github.repository }}:${{ github.ref_name }}-${{ matrix.release }}
+            docker.io/${{ github.repository }}:${{ matrix.version }}-${{ github.ref_name }}
             docker.io/${{ github.repository }}:latest
 
       - name: Update Docker Hub Description

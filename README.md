@@ -7,6 +7,7 @@
 ---
 
 - [Voxpupuli Puppet Server container](#voxpupuli-puppet-server-container)
+  * [New version schema](#new-version-schema)
   * [Configuration](#configuration)
   * [Initialization Scripts](#initialization-scripts)
   * [Persistance](#persistance)
@@ -20,7 +21,7 @@ This project hosts the Dockerfile and the required scripts to build a Puppet Ser
 You can run a copy of Puppet Server with the following Docker command:
 
 ```bash
-docker run --name puppet --hostname puppet ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.0
+docker run --name puppet --hostname puppet ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.3
 ```
 
 Although it is not strictly necessary to name the container `puppet`, this is
@@ -30,12 +31,34 @@ on that hostname by default.
 If you would like to start the Puppet Server with your own Puppet code, you can
 mount your own directory at `/etc/puppetlabs/code`:
 
-    docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code/ ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.0
+    docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code/ ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.3
 
 For compose file see: [CRAFTY](https://github.com/voxpupuli/crafty/tree/main/puppet/oss)
 
 You can find out more about Puppet Server in the [official documentation](https://www.puppet.com/docs/puppet/7/server/about_server.html).
 
+## New version schema
+
+The new version schema has the following layout:
+
+```text
+<puppet.major>.<puppet.minor>.<puppet.patch>-v<container.major>.<container.minor>.<container.patch>
+```
+
+Example usage:
+
+```shell
+docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code/ ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.3
+```
+
+| Name | Description |
+| --- | --- |
+| puppet.major | Describes the contained major Puppet version (7 or 8) |
+| puppet.minor | Describes the contained minor Puppet version |
+| puppet.patch | Describes the contained patchlevel Puppet version |
+| container.major | Describes the major version of the base container (Ubunutu 22.04) or incompatible changes |
+| container.minor | Describes new features or refactoring with backward compatibility |
+| container.patch | Describes if minor changes or bugfixes have been implemented |
 
 ## Configuration
 

@@ -43,9 +43,9 @@ jobs:
           buildfile: puppetserver/Dockerfile
           tags: |
             ghcr.io/${{ github.repository }}:${{ matrix.version }}-${{ github.ref_name }}
-            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ matrix.version }}-latest
             docker.io/${{ github.repository }}:${{ matrix.version }}-${{ github.ref_name }}
-            docker.io/${{ github.repository }}:latest
+            docker.io/${{ github.repository }}:${{ matrix.version }}-latest
 
       - name: Update Docker Hub Description
         uses: peter-evans/dockerhub-description@v3

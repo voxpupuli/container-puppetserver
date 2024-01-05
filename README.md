@@ -89,6 +89,8 @@ The following environment variables are supported:
 | **PUPPETSERVER_GRAPHITE_PORT**             | Only used if **PUPPETSERVER_GRAPHITE_EXPORTER_ENABLED** is set to `true`. Port of the graphite server where puppet should push metrics to. <br><br> Default to `9109` |
 | **PUPPETSERVER_ENVIRONMENT_TIMEOUT**       | Configure the environment timeout<br><br> Defaults to `unlimited`                                                                                             |
 | **PUPPETSERVER_ENABLE_ENV_CACHE_DEL_API**  | Enable the puppet admin api endpoint via certificates to allow clearing environment caches<br><br> Defaults to `true`                                         |
+| **ENVIRONMENTPATH**                        | Set an environmentpath<br><br> Defaults to `/etc/puppetlabs/code/environments`                                                                                |
+| **HIERACONFIG**                            | Set a hiera_config entry in puppet.conf file<br><br> Defaults to `$confdir/hiera.yaml`                                                                        |
 
 ## Initialization Scripts
 

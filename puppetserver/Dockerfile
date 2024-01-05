@@ -42,7 +42,9 @@ ENV PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
     PUPPETSERVER_GRAPHITE_PORT=9109 \
     PUPPETSERVER_GRAPHITE_HOST=exporter \
     PUPPETSERVER_ENVIRONMENT_TIMEOUT=unlimited \
-    PUPPETSERVER_ENABLE_ENV_CACHE_DEL_API=true
+    PUPPETSERVER_ENABLE_ENV_CACHE_DEL_API=true \
+    ENVIRONMENTPATH=/etc/puppetlabs/code/environments \
+    HIERACONFIG="$confdir/hiera.yaml"
 
 # NOTE: this is just documentation on defaults
 EXPOSE 8140

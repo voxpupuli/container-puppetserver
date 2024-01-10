@@ -48,6 +48,7 @@ jobs:
 
   tests:
     needs:
+      - general_ci
       - build_docker_image
     runs-on: ubuntu-latest
     name: Test suite

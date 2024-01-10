@@ -1,5 +1,4 @@
 ---
-
 on:
   pull_request: {}
   push:
@@ -9,6 +8,11 @@ on:
 name: CI
 
 jobs:
+  general_ci:
+    uses: voxpupuli/crafty/.github/workflows/general_ci.yaml@main
+    with:
+      shellcheck_scan_dir: './puppetserver'
+
   build_docker_image:
     name: 'Built test Docker image'
     runs-on: ubuntu-latest
@@ -44,6 +48,7 @@ jobs:
 
   tests:
     needs:
+      - general_ci
       - build_docker_image
     runs-on: ubuntu-latest
     name: Test suite

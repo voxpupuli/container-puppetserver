@@ -7,7 +7,7 @@ ARG UBUNTU_CODENAME=jammy
 
 FROM ubuntu:22.04 as base
 
-ARG PACKAGES=ca-certificates\ git\ netbase\ openjdk-17-jre-headless
+ARG PACKAGES=ca-certificates\ git\ netbase\ openjdk-17-jre-headless\ ruby3.0
 ARG DUMB_INIT_VERSION="1.2.5"
 ARG TARGETARCH
 
@@ -20,7 +20,7 @@ LABEL org.label-schema.maintainer="Voxpupuli Team <info@voxpupuli.org>" \
       org.label-schema.dockerfile="/Dockerfile"
 
 ENV PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
-    PATH=/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:$PATH \
+    PATH=$PATH:/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin \
     SSLDIR=/etc/puppetlabs/puppet/ssl \
     LOGDIR=/var/log/puppetlabs/puppetserver \
     PUPPETSERVER_HOSTNAME="puppet" \

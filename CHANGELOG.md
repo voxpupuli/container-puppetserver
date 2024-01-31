@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.3.0](https://github.com/voxpupuli/container-puppetserver/tree/v1.3.0) (2024-01-31)
+
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/v1.2.0...v1.3.0)
+
+**Implemented enhancements:**
+
+- New packages for PuppetServer: 8.4.0 and 7.15.0 [\#57](https://github.com/voxpupuli/container-puppetserver/issues/57)
+- allow setting csr attributes [\#60](https://github.com/voxpupuli/container-puppetserver/pull/60) ([tuxmea](https://github.com/tuxmea))
+- Update puppetserver packages [\#58](https://github.com/voxpupuli/container-puppetserver/pull/58) ([tuxmea](https://github.com/tuxmea))
+
+**Closed issues:**
+
+- Add support for csr\_attributes.yaml setup [\#50](https://github.com/voxpupuli/container-puppetserver/issues/50)
+
+**Merged pull requests:**
+
+- add skip-changelog to all release prs [\#61](https://github.com/voxpupuli/container-puppetserver/pull/61) ([rwaffen](https://github.com/rwaffen))
+
 ## [v1.2.0](https://github.com/voxpupuli/container-puppetserver/tree/v1.2.0) (2024-01-30)
 
 [Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/v1.1.3...v1.2.0)
@@ -136,23 +154,23 @@ All notable changes to this project will be documented in this file.
 
 ## [7.6.1](https://github.com/voxpupuli/container-puppetserver/tree/7.6.1) (2022-03-02)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.20.0...7.6.1)
-
-## [6.20.0](https://github.com/voxpupuli/container-puppetserver/tree/6.20.0) (2022-03-02)
-
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.19.0...6.20.0)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.19.0...7.6.1)
 
 ## [6.19.0](https://github.com/voxpupuli/container-puppetserver/tree/6.19.0) (2022-03-02)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.6.0...6.19.0)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.20.0...6.19.0)
+
+## [6.20.0](https://github.com/voxpupuli/container-puppetserver/tree/6.20.0) (2022-03-02)
+
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.6.0...6.20.0)
 
 ## [7.6.0](https://github.com/voxpupuli/container-puppetserver/tree/7.6.0) (2021-08-26)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.5.0...7.6.0)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.4.2...7.6.0)
 
-## [7.5.0](https://github.com/voxpupuli/container-puppetserver/tree/7.5.0) (2021-08-26)
+## [7.4.2](https://github.com/voxpupuli/container-puppetserver/tree/7.4.2) (2021-08-26)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.4.1...7.5.0)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.4.1...7.4.2)
 
 ## [7.4.1](https://github.com/voxpupuli/container-puppetserver/tree/7.4.1) (2021-08-26)
 
@@ -160,11 +178,11 @@ All notable changes to this project will be documented in this file.
 
 ## [7.4.0](https://github.com/voxpupuli/container-puppetserver/tree/7.4.0) (2021-08-26)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.4.2...7.4.0)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.5.0...7.4.0)
 
-## [7.4.2](https://github.com/voxpupuli/container-puppetserver/tree/7.4.2) (2021-08-26)
+## [7.5.0](https://github.com/voxpupuli/container-puppetserver/tree/7.5.0) (2021-08-26)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.17.1...7.4.2)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.17.1...7.5.0)
 
 ## [6.17.1](https://github.com/voxpupuli/container-puppetserver/tree/6.17.1) (2021-08-25)
 
@@ -212,15 +230,15 @@ All notable changes to this project will be documented in this file.
 
 ## [6.15.2](https://github.com/voxpupuli/container-puppetserver/tree/6.15.2) (2021-04-07)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.1.0...6.15.2)
-
-## [7.1.0](https://github.com/voxpupuli/container-puppetserver/tree/7.1.0) (2021-01-27)
-
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.0.3...7.1.0)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.0.3...6.15.2)
 
 ## [7.0.3](https://github.com/voxpupuli/container-puppetserver/tree/7.0.3) (2021-01-27)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.12.0...7.0.3)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/7.1.0...7.0.3)
+
+## [7.1.0](https://github.com/voxpupuli/container-puppetserver/tree/7.1.0) (2021-01-27)
+
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.12.0...7.1.0)
 
 ## [6.12.0](https://github.com/voxpupuli/container-puppetserver/tree/6.12.0) (2020-05-11)
 
@@ -316,23 +334,23 @@ All notable changes to this project will be documented in this file.
 
 ## [6.4.0](https://github.com/voxpupuli/container-puppetserver/tree/6.4.0) (2019-06-06)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.3.2...6.4.0)
-
-## [6.3.2](https://github.com/voxpupuli/container-puppetserver/tree/6.3.2) (2019-03-20)
-
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.3.1...6.3.2)
-
-## [6.3.1](https://github.com/voxpupuli/container-puppetserver/tree/6.3.1) (2019-03-20)
-
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.3.3...6.3.1)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.3.3...6.4.0)
 
 ## [6.3.3](https://github.com/voxpupuli/container-puppetserver/tree/6.3.3) (2019-03-20)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.3.0...6.3.3)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.3.1...6.3.3)
+
+## [6.3.1](https://github.com/voxpupuli/container-puppetserver/tree/6.3.1) (2019-03-20)
+
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.3.0...6.3.1)
 
 ## [6.3.0](https://github.com/voxpupuli/container-puppetserver/tree/6.3.0) (2019-03-20)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.2.1...6.3.0)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.3.2...6.3.0)
+
+## [6.3.2](https://github.com/voxpupuli/container-puppetserver/tree/6.3.2) (2019-03-20)
+
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.2.1...6.3.2)
 
 ## [6.2.1](https://github.com/voxpupuli/container-puppetserver/tree/6.2.1) (2019-02-11)
 
@@ -344,11 +362,7 @@ All notable changes to this project will be documented in this file.
 
 ## [6.0.5](https://github.com/voxpupuli/container-puppetserver/tree/6.0.5) (2019-02-09)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/5.3.9...6.0.5)
-
-## [5.3.9](https://github.com/voxpupuli/container-puppetserver/tree/5.3.9) (2019-02-08)
-
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/5.3.8...5.3.9)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/5.3.8...6.0.5)
 
 ## [5.3.8](https://github.com/voxpupuli/container-puppetserver/tree/5.3.8) (2019-02-08)
 
@@ -380,7 +394,11 @@ All notable changes to this project will be documented in this file.
 
 ## [5.3.10](https://github.com/voxpupuli/container-puppetserver/tree/5.3.10) (2019-02-08)
 
-[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.2.0...5.3.10)
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/5.3.9...5.3.10)
+
+## [5.3.9](https://github.com/voxpupuli/container-puppetserver/tree/5.3.9) (2019-02-08)
+
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/6.2.0...5.3.9)
 
 ## [6.2.0](https://github.com/voxpupuli/container-puppetserver/tree/6.2.0) (2019-01-10)
 

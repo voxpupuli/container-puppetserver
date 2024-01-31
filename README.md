@@ -91,6 +91,7 @@ The following environment variables are supported:
 | **PUPPETSERVER_ENABLE_ENV_CACHE_DEL_API**  | Enable the puppet admin api endpoint via certificates to allow clearing environment caches<br><br> Defaults to `true`                                         |
 | **ENVIRONMENTPATH**                        | Set an environmentpath<br><br> Defaults to `/etc/puppetlabs/code/environments`                                                                                |
 | **HIERACONFIG**                            | Set a hiera_config entry in puppet.conf file<br><br> Defaults to `$confdir/hiera.yaml`                                                                        |
+| **CSR_ATTRIBUTES**                         | Provide a JSON string of the csr_attributes.yaml content. e.g. CSR_ATTRIBUTES='{"custom_attributes": { "challengePassword": "foobar" }, "extension_requests": { "pp_project": "foo" } }'<br><br> Defaults to empty JSON object '{}'<br> Please note that within a compose file, you must quote the whole line<br> - 'CSR_ATTRIBUTES={ ...}'                               |
 
 ## Initialization Scripts
 

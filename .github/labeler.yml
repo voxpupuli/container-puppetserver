@@ -1,0 +1,2 @@
+skip-changelog:
+ - head-branch: ['^release-*', 'release']

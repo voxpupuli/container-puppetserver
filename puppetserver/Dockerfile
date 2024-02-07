@@ -44,7 +44,7 @@ ENV PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
     PUPPETSERVER_ENVIRONMENT_TIMEOUT=unlimited \
     PUPPETSERVER_ENABLE_ENV_CACHE_DEL_API=true \
     ENVIRONMENTPATH=/etc/puppetlabs/code/environments \
-    HIERACONFIG="$confdir/hiera.yaml" \
+    HIERACONFIG='$confdir/hiera.yaml' \
     CSR_ATTRIBUTES='{}'
 
 # NOTE: this is just documentation on defaults

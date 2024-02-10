@@ -5,7 +5,7 @@ require 'yaml'
 
 begin
   csr_yaml = YAML.dump(JSON.load(ENV['CSR_ATTRIBUTES']))
-  File.open('/etc/puppetlabs/puppet/csr_attrbitues.yaml', 'w') do |file|
+  File.open('/etc/puppetlabs/puppet/csr_attributes.yaml', 'w') do |file|
     file.write(csr_yaml)
   end
 rescue => error

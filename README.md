@@ -37,6 +37,19 @@ For compose file see: [CRAFTY](https://github.com/voxpupuli/crafty/tree/main/pup
 
 You can find out more about Puppet Server in the [official documentation](https://www.puppet.com/docs/puppet/7/server/about_server.html).
 
+## Note about environment caching
+⚠️ Puppetserver here has [the environment caching](https://www.puppet.com/docs/puppet/8/server/admin-api/v1/environment-cache.html) enabled by default. You should explicitly call the API endpoint to clear the cache when a new environment is deployed. See the `curl` example below.
+
+```bash
+curl -i --cert $(puppet config print hostcert) \
+--key $(puppet config print hostprivkey) \
+--cacert $(puppet config print cacert) \
+-X DELETE \
+https://$(puppet config print server):8140/puppet-admin-api/v1/environment-cache?environment=production
+```
+
+Another option is to disable the environment caching by setting the `PUPPETSERVER_ENVIRONMENT_TIMEOUT` environment variable to zero (`0`).
+
 ## New version schema
 
 The new version schema has the following layout:

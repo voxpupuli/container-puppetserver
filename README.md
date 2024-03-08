@@ -1,18 +1,20 @@
 # Voxpupuli Puppet Server container
 
-[![Sponsored by betadots GmbH](https://img.shields.io/badge/Sponsored%20by-betadots%20GmbH-blue.svg)](https://www.betadots.de)
-[![License](https://img.shields.io/github/license/voxpupuli/container-puppetserver.svg)](https://github.com/voxpupuli/container-puppetserver/blob/main/LICENSE)
 [![CI](https://github.com/voxpupuli/container-puppetserver/actions/workflows/ci.yaml/badge.svg)](https://github.com/voxpupuli/container-puppetserver/actions/workflows/ci.yaml)
+[![License](https://img.shields.io/github/license/voxpupuli/container-puppetserver.svg)](https://github.com/voxpupuli/container-puppetserver/blob/main/LICENSE)
+[![Donated by Puppet](https://img.shields.io/badge/Donated%20by-Puppet-blue.svg)](https://www.puppet.com)
+[![Sponsored by betadots GmbH](https://img.shields.io/badge/Sponsored%20by-betadots%20GmbH-blue.svg)](https://www.betadots.de)
 
 ---
 
 - [Voxpupuli Puppet Server container](#voxpupuli-puppet-server-container)
-  * [New version schema](#new-version-schema)
-  * [Configuration](#configuration)
-  * [Initialization Scripts](#initialization-scripts)
-  * [Persistance](#persistance)
-  * [How to Release the container](#how-to-release-the-container)
-  * [How to contribute](#how-to-contribute)
+  - [New version schema](#new-version-schema)
+  - [Configuration](#configuration)
+  - [Initialization Scripts](#initialization-scripts)
+  - [Persistance](#persistance)
+  - [How to Release the container](#how-to-release-the-container)
+  - [How to contribute](#how-to-contribute)
+  - [Transfer notice](#transfer-notice)
 
 ---
 
@@ -31,14 +33,19 @@ on that hostname by default.
 If you would like to start the Puppet Server with your own Puppet code, you can
 mount your own directory at `/etc/puppetlabs/code`:
 
-    docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code/ ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.3
+```shell
+ docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.3
+```
 
 For compose file see: [CRAFTY](https://github.com/voxpupuli/crafty/tree/main/puppet/oss)
 
 You can find out more about Puppet Server in the [official documentation](https://www.puppet.com/docs/puppet/7/server/about_server.html).
 
 ## Note about environment caching
-⚠️ Puppetserver here has [the environment caching](https://www.puppet.com/docs/puppet/8/server/admin-api/v1/environment-cache.html) enabled by default. You should explicitly call the API endpoint to clear the cache when a new environment is deployed. See the `curl` example below.
+
+⚠️ The Puppetserver has [the environment caching](https://www.puppet.com/docs/puppet/8/server/admin-api/v1/environment-cache.html) enabled by default.
+You should explicitly call the API endpoint to clear the cache when a new environment is deployed.
+See the `curl` example below.
 
 ```bash
 curl -i --cert $(puppet config print hostcert) \
@@ -104,7 +111,7 @@ The following environment variables are supported:
 | **PUPPETSERVER_ENABLE_ENV_CACHE_DEL_API**  | Enable the puppet admin api endpoint via certificates to allow clearing environment caches<br><br> Defaults to `true`                                         |
 | **ENVIRONMENTPATH**                        | Set an environmentpath<br><br> Defaults to `/etc/puppetlabs/code/environments`                                                                                |
 | **HIERACONFIG**                            | Set a hiera_config entry in puppet.conf file<br><br> Defaults to `$confdir/hiera.yaml`                                                                        |
-| **CSR_ATTRIBUTES**                         | Provide a JSON string of the csr_attributes.yaml content. e.g. CSR_ATTRIBUTES='{"custom_attributes": { "challengePassword": "foobar" }, "extension_requests": { "pp_project": "foo" } }'<br><br> Defaults to empty JSON object '{}'<br> Please note that within a compose file, you must provide all environment variables as Hash and not as Array!<br> environment:<br>   CSR_ATTRIBUTES: '{"extension_request": {...}}'                               |
+| **CSR_ATTRIBUTES**                         | Provide a JSON string of the csr_attributes.yaml content. e.g. `CSR_ATTRIBUTES='{"custom_attributes": { "challengePassword": "foobar" }, "extension_requests": { "pp_project": "foo" } }'`<br><br> Defaults to empty JSON object `{}`<br> Please note that within a compose file, you must provide all environment variables as Hash and not as Array!<br> environment:<br> `CSR_ATTRIBUTES: '{"extension_request": {...}}'` |
 
 ## Initialization Scripts
 
@@ -124,3 +131,9 @@ For example, `docker run -v $PWD/ca-ssl:/etc/puppetlabs/puppetserver/ca ghcr.io/
 ## How to contribute
 
 [see here](https://github.com/voxpupuli/crafty/blob/main/CONTRIBUTING.md)
+
+## Transfer Notice
+
+This project was originally authored by [Puppet](https://github.com/puppetlabs).
+The maintainer preferred that Vox Pupuli take ownership of the project for future improvement and maintenance.
+Existing pull requests and issues were transferred over, please fork and continue to contribute here.

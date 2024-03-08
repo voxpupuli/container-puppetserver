@@ -14,6 +14,7 @@
   - [Persistance](#persistance)
   - [How to Release the container](#how-to-release-the-container)
   - [How to contribute](#how-to-contribute)
+  - [Transfer notice](#transfer-notice)
 
 ---
 
@@ -130,3 +131,9 @@ For example, `docker run -v $PWD/ca-ssl:/etc/puppetlabs/puppetserver/ca ghcr.io/
 ## How to contribute
 
 [see here](https://github.com/voxpupuli/crafty/blob/main/CONTRIBUTING.md)
+
+## Transfer Notice
+
+This project was originally authored by [Puppet](https://github.com/puppetlabs).
+The maintainer preferred that Vox Pupuli take ownership of the project for future improvement and maintenance.
+Existing pull requests and issues were transferred over, please fork and continue to contribute here.

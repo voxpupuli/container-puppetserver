@@ -118,7 +118,10 @@ COPY puppetserver /etc/default/puppetserver
 COPY logback.xml \
      request-logging.xml \
      /etc/puppetlabs/puppetserver/
-COPY puppetserver.conf /etc/puppetlabs/puppetserver/conf.d/
+
+COPY conf.d/puppetserver.conf /etc/puppetlabs/puppetserver/conf.d/
+COPY conf.d/product.conf /etc/puppetlabs/puppetserver/conf.d/
+
 COPY puppetdb.conf /var/tmp/puppet/
 
 LABEL org.label-schema.name="Puppet Server ($build_type)" \

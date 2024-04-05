@@ -2,11 +2,11 @@
   "include": [
     {
       "release": 7,
-      "version": "7.15.0"
+      "version": "7.16.0"
     },
     {
       "release": 8,
-      "version": "8.4.0"
+      "version": "8.5.0"
     }
   ]
 }

@@ -1,6 +1,9 @@
 #!/bin/bash
 
-if test -n "${PUPPETSERVER_HOSTNAME}"; then
-  /opt/puppetlabs/bin/puppet config set certname "$PUPPETSERVER_HOSTNAME"
+if [ -n "${PUPPETSERVER_HOSTNAME}" ]; then
   /opt/puppetlabs/bin/puppet config set server "$PUPPETSERVER_HOSTNAME"
+fi
+
+if [ -n "${CERTNAME}" ]; then
+  /opt/puppetlabs/bin/puppet config set certname "$CERTNAME"
 fi

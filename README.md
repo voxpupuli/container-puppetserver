@@ -86,7 +86,8 @@ The following environment variables are supported:
 
 | Name                                       | Usage / Default                                                                                                                                               |
 |--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **PUPPETSERVER_HOSTNAME**                  | The DNS name used on the servers SSL certificate - sets the `certname` and `server` in puppet.conf<br><br>Defaults to unset.                                  |
+| **PUPPETSERVER_HOSTNAME**                  | The DNS name used on the servers SSL certificate - sets the `server` in puppet.conf<br><br>Defaults to unset.                                                 |
+| **CERTNAME**                               | The DNS name used on the servers SSL certificate - sets the `certname` in puppet.conf<br><br>Defaults to unset.                                               |
 | **DNS_ALT_NAMES**                          | Additional DNS names to add to the servers SSL certificate<br>**Note** only effective on initial run when certificates are generated                          |
 | **PUPPETSERVER_PORT**                      | The port of the puppetserver<br><br>`8140`                                                                                                                    |
 | **AUTOSIGN**                               | Whether or not to enable autosigning on the puppetserver instance. Valid values are `true`, `false`, and `/path/to/autosign.conf`.<br><br>Defaults to `true`. |

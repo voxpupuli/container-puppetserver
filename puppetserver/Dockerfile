@@ -24,6 +24,7 @@ ENV PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
     SSLDIR=/etc/puppetlabs/puppet/ssl \
     LOGDIR=/var/log/puppetlabs/puppetserver \
     PUPPETSERVER_HOSTNAME="" \
+    CERTNAME="" \
     DNS_ALT_NAMES="" \
     PUPPETSERVER_PORT=8140 \
     AUTOSIGN=true \

@@ -1,8 +1,8 @@
 ---
+name: "Labeler 🏷️"
+
 on:
-  push:
-    tags:
-      - '*'
+  - pull_request_target
 
 jobs:
   labeler:

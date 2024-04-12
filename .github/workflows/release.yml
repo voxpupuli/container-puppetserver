@@ -5,8 +5,8 @@ on:
       - '*'
 
 jobs:
-  labeler:
-    name: Labeler
-    uses: voxpupuli/crafty/.github/workflows/labeler.yml@main
+  release:
+    name: Release
+    uses: voxpupuli/crafty/.github/workflows/release.yml@main
     with:
       allowed_owner: ${{ github.repository_owner }}

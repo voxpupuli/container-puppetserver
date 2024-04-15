@@ -2,12 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [v1.4.1](https://github.com/voxpupuli/container-puppetserver/tree/v1.4.1) (2024-04-12)
+## [v1.4.1](https://github.com/voxpupuli/container-puppetserver/tree/v1.4.1) (2024-04-15)
 
 [Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/v1.4.0...v1.4.1)
 
 **Merged pull requests:**
 
+- fix labeler to work again on pull requests, not tags [\#82](https://github.com/voxpupuli/container-puppetserver/pull/82) ([rwaffen](https://github.com/rwaffen))
 - use shared workflows from crafty [\#80](https://github.com/voxpupuli/container-puppetserver/pull/80) ([rwaffen](https://github.com/rwaffen))
 
 ## [v1.4.0](https://github.com/voxpupuli/container-puppetserver/tree/v1.4.0) (2024-04-05)

@@ -1,4 +1,6 @@
-#! /bin/bash
+#!/bin/bash
+
+set -e
 
 # During build, pristine config files get copied to this directory. If
 # they are not in the current container, use these templates as the

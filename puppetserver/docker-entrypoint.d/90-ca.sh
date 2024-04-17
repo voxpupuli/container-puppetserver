@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ca_running() {
   status=$(curl --silent --fail --insecure "https://${CA_HOSTNAME}:${CA_PORT:-8140}/status/v1/simple")
   test "$status" = "running"

@@ -1,5 +1,7 @@
 #! /bin/sh
 
+set -e
+
 ### Print configuration for troubleshooting
 echo "System configuration values:"
 # shellcheck disable=SC2039 # Docker injects $HOSTNAME

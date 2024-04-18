@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ -n "${PUPPETSERVER_HOSTNAME}" ]; then
   /opt/puppetlabs/bin/puppet config set server "$PUPPETSERVER_HOSTNAME"
 fi

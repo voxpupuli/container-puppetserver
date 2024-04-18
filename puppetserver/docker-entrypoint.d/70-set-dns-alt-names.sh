@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Allow setting dns_alt_names for the compilers certificate. This
 # setting will only have an effect when the container is started without
 # an existing certificate on the /etc/puppetlabs/puppet volume

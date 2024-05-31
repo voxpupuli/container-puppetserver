@@ -123,7 +123,22 @@ These scripts will be executed at the end of the entrypoint script, before the s
 
 If you plan to use the in-server CA, restarting the container can cause the server's keys and certificates to change, causing agents and the server to stop trusting each other.
 To prevent this, you can persist the default cadir, `/etc/puppetlabs/puppetserver/ca`.
-For example, `docker run -v $PWD/ca-ssl:/etc/puppetlabs/puppetserver/ca ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.0`.
+For example:
+
+```shell
+docker run -v $PWD/ca-ssl:/etc/puppetlabs/puppetserver/ca ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.0
+```
+
+or in compose:
+
+```yaml
+services:
+  puppet:
+    image: ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.0
+    # ...
+    volumes:
+      - ./ca-ssl:/etc/puppetlabs/puppetserver/ca
+```
 
 ## How to Release the container
 

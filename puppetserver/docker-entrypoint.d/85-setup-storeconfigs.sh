@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 if [ -n "$PUPPET_STORECONFIGS_BACKEND" ]; then
   puppet config set storeconfigs_backend $PUPPET_STORECONFIGS_BACKEND --section master
 fi

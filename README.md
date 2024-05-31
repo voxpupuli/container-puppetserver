@@ -129,7 +129,7 @@ For example, `docker run -v $PWD/ca-ssl:/etc/puppetlabs/puppetserver/ca ghcr.io/
 
 ## How to Release the container
 
-[see here](https://github.com/voxpupuli/crafty/blob/main/docs/how-to-release.md)
+[see here](https://github.com/voxpupuli/crafty/blob/main/RELEASE.md)
 
 ## How to contribute
 

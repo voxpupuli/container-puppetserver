@@ -1,4 +1,5 @@
 #!/bin/bash
-#
-puppet config set --section server hiera_config $HIERACONFIG
 
+set -e
+
+puppet config set --section server hiera_config $HIERACONFIG

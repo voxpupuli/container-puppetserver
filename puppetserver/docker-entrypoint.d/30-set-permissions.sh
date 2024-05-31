@@ -1,4 +1,6 @@
-#! /bin/bash
+#!/bin/bash
+
+set -e
 
 chown -R puppet:puppet /etc/puppetlabs/puppet/
 chown -R puppet:puppet /opt/puppetlabs/server/data/puppetserver/

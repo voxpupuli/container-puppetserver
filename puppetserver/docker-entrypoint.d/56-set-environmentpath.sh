@@ -1,4 +1,5 @@
 #!/bin/bash
-#
-puppet config set --section server environmentpath $ENVIRONMENTPATH
 
+set -e
+
+puppet config set --section server environmentpath $ENVIRONMENTPATH

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 hocon() {
   /opt/puppetlabs/puppet/lib/ruby/vendor_gems/bin/hocon "$@"
 }

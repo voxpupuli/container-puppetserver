@@ -12,7 +12,7 @@ if [ -n "${CERTNAME}" ]; then
   echo "* CERTNAME: '${CERTNAME}'"
   certname=${CERTNAME}.pem
 else
-  echo "* CERTNAME: unset"
+  echo "* CERTNAME: unset,  try to use the oldest certificate in the certs directory, because this might be the one that was used initially."
   certname=$(cd "${SSLDIR}/certs" && find * -type f -name '*.pem' ! -name ca.pem -print0 | xargs -0 ls -1tr | head -n 1)
   if [ -z "${certname}" ]; then
     echo "WARNING: No certificates found in ${SSLDIR}/certs! Please set CERTNAME!"

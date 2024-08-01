@@ -7,7 +7,7 @@ ARG UBUNTU_CODENAME=jammy
 
 FROM ubuntu:22.04 as base
 
-ARG PACKAGES=ca-certificates\ git\ netbase\ openjdk-17-jre-headless\ ruby3.0
+ARG PACKAGES="ca-certificates git netbase openjdk-17-jre-headless ruby3.0 ruby3.0-dev openssh-client gcc make cmake pkg-config libssl-dev libc6-dev"
 ARG DUMB_INIT_VERSION="1.2.5"
 ARG TARGETARCH
 
@@ -110,6 +110,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     gem install --no-doc r10k && \
+    gem install --no-doc rugged && \
     cp -pr /etc/puppetlabs/puppet /var/tmp && \
     cp -pr /opt/puppetlabs/server/data/puppetserver /var/tmp && \
     rm -rf /var/tmp/puppet/ssl

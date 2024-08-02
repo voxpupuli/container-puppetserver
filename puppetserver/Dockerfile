@@ -85,6 +85,12 @@ ENV PUPPET_RELEASE=${PUPPET_RELEASE:-7}
 ARG PUPPETSERVER_VERSION
 ENV PUPPETSERVER_VERSION=${PUPPETSERVER_VERSION:-7.13.0}
 
+ARG R10K_VERSION
+ENV R10K_VERSION=${R10K_VERSION:-4.1.0}
+
+ARG RUGGED_VERSION
+ENV RUGGED_VERSION=${RUGGED_VERSION:-1.7.2}
+
 ARG UBUNTU_CODENAME
 
 ######################################################
@@ -109,8 +115,8 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y puppetserver=${PUPPETSERVER_VERSION}-1${UBUNTU_CODENAME} puppetdb-termini && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    gem install --no-doc r10k && \
-    gem install --no-doc rugged && \
+    gem install --no-doc r10k -v $R10K_VERSION && \
+    gem install --no-doc rugged -v $RUGGED_VERSION && \
     cp -pr /etc/puppetlabs/puppet /var/tmp && \
     cp -pr /opt/puppetlabs/server/data/puppetserver /var/tmp && \
     rm -rf /var/tmp/puppet/ssl

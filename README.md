@@ -18,12 +18,16 @@
 
 ---
 
+__⚠️ Attention ⚠️__: the container name `voxpupuli/container-puppetserver` will be deprecated in 2025-02 and might be removed in the future. Please use `voxpupuli/puppetserver` instead.
+
+---
+
 This project hosts the Dockerfile and the required scripts to build a Puppet Server container image.
 
 You can run a copy of Puppet Server with the following Docker command:
 
 ```bash
-docker run --name puppet --hostname puppet ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.3
+docker run --name puppet --hostname puppet ghcr.io/voxpupuli/puppetserver:8.6.1-latest
 ```
 
 Although it is not strictly necessary to name the container `puppet`, this is
@@ -34,7 +38,7 @@ If you would like to start the Puppet Server with your own Puppet code, you can
 mount your own directory at `/etc/puppetlabs/code`:
 
 ```shell
- docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.3
+ docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code ghcr.io/voxpupuli/puppetserver:8.6.1-latest
 ```
 
 For compose file see: [CRAFTY](https://github.com/voxpupuli/crafty/tree/main/puppet/oss)
@@ -68,7 +72,7 @@ The new version schema has the following layout:
 Example usage:
 
 ```shell
-docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code/ ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.3
+docker run --name puppet --hostname puppet -v ./code:/etc/puppetlabs/code/ ghcr.io/voxpupuli/puppetserver:8.6.1-v1.6.0
 ```
 
 | Name | Description |
@@ -126,7 +130,7 @@ To prevent this, you can persist the default cadir, `/etc/puppetlabs/puppetserve
 For example:
 
 ```shell
-docker run -v $PWD/ca-ssl:/etc/puppetlabs/puppetserver/ca ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.0
+docker run -v $PWD/ca-ssl:/etc/puppetlabs/puppetserver/ca ghcr.io/voxpupuli/puppetserver:8.6.1-latest
 ```
 
 or in compose:
@@ -134,7 +138,7 @@ or in compose:
 ```yaml
 services:
   puppet:
-    image: ghcr.io/voxpupuli/container-puppetserver:7.13.0-v1.1.0
+    image: ghcr.io/voxpupuli/puppetserver:8.6.1-latest
     # ...
     volumes:
       - ./ca-ssl:/etc/puppetlabs/puppetserver/ca

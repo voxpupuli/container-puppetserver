@@ -47,12 +47,25 @@ jobs:
             ghcr.io/${{ github.repository }}:${{ matrix.version }}-${{ github.ref_name }}
             ghcr.io/${{ github.repository }}:${{ matrix.version }}-latest
             ghcr.io/${{ github.repository }}:latest
+            ghcr.io/voxpupuli/puppetserver:${{ matrix.version }}-${{ github.ref_name }}
+            ghcr.io/voxpupuli/puppetserver:${{ matrix.version }}-latest
+            ghcr.io/voxpupuli/puppetserver:latest
             docker.io/${{ github.repository }}:${{ matrix.version }}-${{ github.ref_name }}
             docker.io/${{ github.repository }}:${{ matrix.version }}-latest
             docker.io/${{ github.repository }}:latest
+            docker.io/voxpupuli/puppetserver:${{ matrix.version }}-${{ github.ref_name }}
+            docker.io/voxpupuli/puppetserver:${{ matrix.version }}-latest
+            docker.io/voxpupuli/puppetserver:latest
 
       - name: Update Docker Hub Description
         uses: peter-evans/dockerhub-description@v4
         with:
           username: voxpupulibot
           password: ${{ secrets.DOCKERHUB_BOT_PASSWORD }}
+
+      - name: Update Docker Hub Description for shortname
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: voxpupulibot
+          password: ${{ secrets.DOCKERHUB_BOT_PASSWORD }}
+          repository: voxpupuli/puppetserver

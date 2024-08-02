@@ -7,7 +7,8 @@ ARG UBUNTU_CODENAME=jammy
 
 FROM ubuntu:22.04 as base
 
-ARG PACKAGES="ca-certificates git netbase openjdk-17-jre-headless ruby3.0 ruby3.0-dev openssh-client gcc make cmake pkg-config libssl-dev libc6-dev"
+ARG PACKAGES="ca-certificates git netbase openjdk-17-jre-headless ruby3.0 openssh-client"
+ARG BUILD_PKGS="ruby3.0-dev gcc make cmake pkg-config libssl-dev libc6-dev"
 ARG DUMB_INIT_VERSION="1.2.5"
 ARG TARGETARCH
 
@@ -65,13 +66,22 @@ COPY add_cache_del_api_auth_rules.rb /add_cache_del_api_auth_rules.rb
 # k8s uses livenessProbe, startupProbe, readinessProbe and ignores HEALTHCHECK
 HEALTHCHECK --interval=20s --timeout=15s --retries=12 --start-period=3m CMD ["/healthcheck.sh"]
 
+ARG R10K_VERSION=4.1.0
+ARG RUGGED_VERSION=1.7.2
+
 # no need to pin versions or clear apt cache as its still being used
 # hadolint ignore=DL3008,DL3009
 RUN chmod +x /docker-entrypoint.sh /healthcheck.sh /docker-entrypoint.d/*.sh && \
     apt-get update && \
-    apt-get install -y --no-install-recommends $PACKAGES && \
+    apt-get install -y --no-install-recommends $PACKAGES $BUILD_PKGS && \
+    gem install --no-doc r10k -v $R10K_VERSION && \
+    gem install --no-doc rugged -v $RUGGED_VERSION && \
     dpkg -i dumb-init_"$DUMB_INIT_VERSION"_"$TARGETARCH".deb && \
-    rm dumb-init_"$DUMB_INIT_VERSION"_"$TARGETARCH".deb
+    rm dumb-init_"$DUMB_INIT_VERSION"_"$TARGETARCH".deb && \
+    apt remove -y $BUILD_PKGS && \
+    apt-get clean && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
 
 ######################################################
 # release (build from packages)
@@ -115,8 +125,6 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y puppetserver=${PUPPETSERVER_VERSION}-1${UBUNTU_CODENAME} puppetdb-termini && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    gem install --no-doc r10k -v $R10K_VERSION && \
-    gem install --no-doc rugged -v $RUGGED_VERSION && \
     cp -pr /etc/puppetlabs/puppet /var/tmp && \
     cp -pr /opt/puppetlabs/server/data/puppetserver /var/tmp && \
     rm -rf /var/tmp/puppet/ssl

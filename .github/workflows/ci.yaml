@@ -73,7 +73,6 @@ jobs:
           command: compare
           image: 'local://ci/puppetserver:${{ matrix.version }}'
           to: 'ghcr.io/voxpupuli/puppetserver:${{ matrix.version }}-latest'
-          sarif-file: sarif.output.${{ matrix.version }}.${{ github.sha }}.json
           summary: true
           keep-previous-comments: true
 

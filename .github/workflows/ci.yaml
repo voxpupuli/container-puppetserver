@@ -1,55 +1,82 @@
 ---
+name: CI🚦
+
 on:
-  pull_request: {}
-  push:
+  pull_request:
     branches:
       - main
-
-name: CI
+  workflow_dispatch:
 
 jobs:
+  setup-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Source checkout
+        uses: actions/checkout@v4
+
+      - id: set-matrix
+        run: echo "matrix=$(jq -c . build_versions.json)" >> $GITHUB_OUTPUT
+
   general_ci:
     uses: voxpupuli/crafty/.github/workflows/general_ci.yaml@main
     with:
       shellcheck_scan_dir: './puppetserver'
 
-  build_docker_image:
-    name: 'Built test Docker image'
+  build_test_container:
+    name: 'Build test container'
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 'puppetserver'
     permissions:
       actions: read
       contents: read
       security-events: write
+      pull-requests: write
+    needs: setup-matrix
+    strategy:
+      matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Docker image
+      - name: Build image
         uses: docker/build-push-action@v6
         with:
+          tags: 'ci/puppetserver:${{ matrix.version }}'
           context: puppetserver
-          tags: 'ci/puppetserver:${{ github.sha }}'
           push: false
+          build-args: |
+            PUPPET_RELEASE=${{ matrix.release }}
+            PUPPETSERVER_VERSION=${{ matrix.version }}
+            R10K_VERSION=${{ matrix.r10k_version }}
+            RUGGED_VERSION=${{ matrix.rugged_version }}
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          image-ref: 'ci/puppetserver:${{ github.sha }}'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          username: voxpupulibot
+          password: ${{ secrets.DOCKERHUB_BOT_PASSWORD }}
 
-      - name: Upload Trivy scan results to GitHub Security tab
+      - name: Analyze Container Image
+        id: analyze-image
+        uses: docker/scout-action@v1
+        with:
+          command: cves,compare
+          to: 'ghcr.io/voxpupuli/puppetserver:${{ matrix.version }}-latest'
+          image: 'local://ci/puppetserver:${{ matrix.version }}'
+          sarif-file: sarif.output.${{ matrix.version }}.${{ github.sha }}.json
+          summary: true
+
+      - name: Upload SARIF result
+        id: upload-sarif
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: sarif.output.${{ matrix.version }}.${{ github.sha }}.json
 
   tests:
     needs:
       - general_ci
-      - build_docker_image
+      - build_test_container
     runs-on: ubuntu-latest
     name: Test suite
     steps:

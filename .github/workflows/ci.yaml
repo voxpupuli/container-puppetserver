@@ -57,15 +57,25 @@ jobs:
           username: voxpupulibot
           password: ${{ secrets.DOCKERHUB_BOT_PASSWORD }}
 
-      - name: Analyze Container Image
-        id: analyze-image
+      - name: Analyze container image for CVEs
+        id: analyze-image-cves
         uses: docker/scout-action@v1
         with:
-          command: cves,compare
-          to: 'ghcr.io/voxpupuli/puppetserver:${{ matrix.version }}-latest'
+          command: cves
           image: 'local://ci/puppetserver:${{ matrix.version }}'
           sarif-file: sarif.output.${{ matrix.version }}.${{ github.sha }}.json
+          write-comment: false
+
+      - name: Compare container image to latest from Registry
+        id: compare-image
+        uses: docker/scout-action@v1
+        with:
+          command: compare
+          image: 'local://ci/puppetserver:${{ matrix.version }}'
+          to: 'ghcr.io/voxpupuli/puppetserver:${{ matrix.version }}-latest'
+          sarif-file: sarif.output.${{ matrix.version }}.${{ github.sha }}.json
           summary: true
+          keep-previous-comments: true
 
       - name: Upload SARIF result
         id: upload-sarif

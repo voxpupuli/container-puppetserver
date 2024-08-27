@@ -2,9 +2,7 @@
 name: CI🚦
 
 on:
-  pull_request:
-    branches:
-      - main
+  pull_request_target:
   workflow_dispatch:
 
 jobs:
@@ -55,7 +53,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: voxpupulibot
-          password: ${{ secrets.DOCKERHUB_BOT_PASSWORD }}
+          password: ${{ secrets.DOCKERHUB_BOT_RO_PASSWORD }}
 
       - name: Analyze container image for CVEs
         id: analyze-image-cves

@@ -157,3 +157,4 @@ services:
 This project was originally authored by [Puppet](https://github.com/puppetlabs).
 The maintainer preferred that Vox Pupuli take ownership of the project for future improvement and maintenance.
 Existing pull requests and issues were transferred over, please fork and continue to contribute here.
+

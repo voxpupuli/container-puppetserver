@@ -2,7 +2,7 @@
 name: CI🚦
 
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - main
   workflow_dispatch:

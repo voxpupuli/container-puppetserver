@@ -10,7 +10,7 @@ Your attention to this specific branch naming convention is essential for accura
 ```shell
 export RELEASE_VERSION="X.Y.Z"
 git switch main
-git pull -r
+git pull --rebase
 git switch -c release-v$RELEASE_VERSION
 
 bundle config set --local path vendor/bundle

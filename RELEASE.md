@@ -19,7 +19,7 @@ bundle install
 
 CHANGELOG_GITHUB_TOKEN="token_MC_tokenface" bundle exec rake changelog
 git commit --all --message "Release v${RELEASE_VERSION}"
-git push origin release-v$RELEASE_VERSION
+git push --set-upstream origin HEAD
 ```
 
 Then open a PR, discuss and merge.

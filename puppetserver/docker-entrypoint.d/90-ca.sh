@@ -45,7 +45,7 @@ else
   hocon -f /etc/puppetlabs/puppetserver/conf.d/ca.conf \
     set certificate-authority.allow-subject-alt-names "${CA_ALLOW_SUBJECT_ALT_NAMES}"
 
-  if [[ "$INTERMEDIATE_CA" != "true" ]]; then
+  if [[ "$INTERMEDIATE_CA" == "true" ]]; then
     # sanity check
     if [[ -z $INTERMEDIATE_CA_BUNDLE ]]; then
       echo 'Error: When enabling intermediate ca, one MUST specify INTERMEDIATE_CA_BUNDLE'

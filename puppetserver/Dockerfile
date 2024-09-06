@@ -12,7 +12,7 @@ ARG BUILD_PKGS="ruby3.0-dev gcc make cmake pkg-config libssl-dev libc6-dev"
 ARG DUMB_INIT_VERSION="1.2.5"
 ARG TARGETARCH
 
-LABEL org.label-schema.maintainer="Voxpupuli Team <info@voxpupuli.org>" \
+LABEL org.label-schema.maintainer="Voxpupuli Team <voxpupuli@groups.io>" \
       org.label-schema.vendor="Voxpupuli" \
       org.label-schema.url="https://github.com/voxpupuli/container-puppetserver" \
       org.label-schema.license="Apache-2.0" \

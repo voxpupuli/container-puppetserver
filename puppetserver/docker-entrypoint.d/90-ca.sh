@@ -60,10 +60,14 @@ else
       exit 99
     fi
 
-    puppetserver ca import \
-      --cert-bundle $INTERMEDIATE_CA_BUNDLE \
-      --crl-chain $INTERMEDIATE_CRL_CHAIN \
-      --private-key $INTERMEDIATE_CA_KEY
+    if [[ -f /etc/puppetlabs/puppet/ssl/certs/ca.pem ]]; then
+      echo "CA already imported."
+    else
+      puppetserver ca import \
+        --cert-bundle $INTERMEDIATE_CA_BUNDLE \
+        --crl-chain $INTERMEDIATE_CRL_CHAIN \
+        --private-key $INTERMEDIATE_CA_KEY
+    fi
   else
     new_cadir=/etc/puppetlabs/puppetserver/ca
 

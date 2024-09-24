@@ -5,7 +5,7 @@ ARG UBUNTU_CODENAME=jammy
 # base
 ######################################################
 
-FROM ubuntu:22.04 as base
+FROM ubuntu:22.04 AS base
 
 ARG PACKAGES="ca-certificates git netbase openjdk-17-jre-headless ruby3.0 openssh-client"
 ARG BUILD_PKGS="ruby3.0-dev gcc make cmake pkg-config libssl-dev libc6-dev"
@@ -91,7 +91,7 @@ RUN chmod +x /docker-entrypoint.sh /healthcheck.sh /docker-entrypoint.d/*.sh && 
 # release (build from packages)
 ######################################################
 
-FROM base as release
+FROM base AS release
 
 ARG PUPPET_RELEASE=8
 ARG PUPPETSERVER_VERSION=8.6.1
@@ -105,7 +105,7 @@ ARG PUPPET_USER_GID=999
 
 # dynamically selects "edge" or "release" alias based on ARG
 # hadolint ignore=DL3006
-FROM ${build_type} as final
+FROM ${build_type} AS final
 
 ARG vcs_ref
 ARG build_type

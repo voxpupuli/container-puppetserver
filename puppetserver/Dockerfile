@@ -96,6 +96,8 @@ FROM base as release
 ARG PUPPET_RELEASE=8
 ARG PUPPETSERVER_VERSION=8.6.1
 ARG UBUNTU_CODENAME
+ARG PUPPET_USER_UID=999
+ARG PUPPET_USER_GID=999
 
 ######################################################
 # final image
@@ -111,6 +113,10 @@ ARG build_date
 
 ENV PUPPET_DEB=puppet${PUPPET_RELEASE}-release-${UBUNTU_CODENAME}.deb
 ADD https://apt.puppet.com/${PUPPET_DEB} /${PUPPET_DEB}
+
+# Create puppet user and group with PUPPET_USER_UID and PUPPET_USER_GID
+RUN groupadd -g ${PUPPET_USER_GID} puppet && \
+    useradd -m -u ${PUPPET_USER_UID} -g puppet puppet
 
 # hadolint ignore=DL3008,DL3028
 RUN dpkg -i /${PUPPET_DEB} && \

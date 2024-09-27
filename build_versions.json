@@ -8,7 +8,7 @@
     },
     {
       "release": 8,
-      "version": "8.6.2",
+      "version": "8.6.3",
       "r10k_version": "4.1.0",
       "rugged_version": "1.7.2"
     }

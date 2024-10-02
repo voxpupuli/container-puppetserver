@@ -13,9 +13,14 @@ if [ -n "${CERTNAME}" ]; then
   certname=${CERTNAME}.pem
 else
   echo "* CERTNAME: unset, try to use the oldest certificate in the certs directory, because this might be the one that was used initially."
-  certname=$(cd "${SSLDIR}/certs" && find * -type f -name '*.pem' ! -name ca.pem -print0 | xargs -0 ls -1tr | head -n 1)
-  if [ -z "${certname}" ]; then
-    echo "WARNING: No certificates found in ${SSLDIR}/certs! Please set CERTNAME!"
+  if [ ! -d "${SSLDIR}/certs" ]; then
+    certname="Not-Found"
+    echo "WARNING: No certificates directory found in ${SSLDIR}!"
+  else
+    certname=$(cd "${SSLDIR}/certs" && find * -type f -name '*.pem' ! -name ca.pem -print0 | xargs -0 ls -1tr | head -n 1)
+    if [ -z "${certname}" ]; then
+      echo "WARNING: No certificates found in ${SSLDIR}/certs! Please set CERTNAME!"
+    fi
   fi
 fi
 
@@ -33,7 +38,11 @@ if [ -f "${SSLDIR}/certs/ca.pem" ]; then
 fi
 
 if [ -n "${certname}" ]; then
-  echo "Certificate ${certname}:"
-  # shellcheck disable=SC2086 # $altnames shouldn't be quoted
-  openssl x509 -subject -issuer -text -noout -in "${SSLDIR}/certs/${certname}" $altnames
+  if [ -f "${SSLDIR}/certs/${certname}" ]; then
+    echo "Certificate ${certname}:"
+    # shellcheck disable=SC2086 # $altnames shouldn't be quoted
+    openssl x509 -subject -issuer -text -noout -in "${SSLDIR}/certs/${certname}" $altnames
+  else
+    echo "WARNING: Certificate ${certname} not found in ${SSLDIR}/certs!"
+  fi
 fi

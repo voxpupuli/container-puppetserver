@@ -7,8 +7,8 @@ ARG UBUNTU_CODENAME=jammy
 
 FROM ubuntu:22.04 AS base
 
-ARG PACKAGES="ca-certificates git netbase openjdk-17-jre-headless ruby3.0 openssh-client"
-ARG BUILD_PKGS="ruby3.0-dev gcc make cmake pkg-config libssl-dev libc6-dev"
+ARG PACKAGES="ca-certificates git netbase openjdk-17-jre-headless ruby3.0 openssh-client libssh2-1"
+ARG BUILD_PKGS="ruby3.0-dev gcc make cmake pkg-config libssl-dev libc6-dev libssh2-1-dev"
 ARG DUMB_INIT_VERSION="1.2.5"
 ARG TARGETARCH
 
@@ -79,7 +79,7 @@ RUN chmod +x /docker-entrypoint.sh /healthcheck.sh /docker-entrypoint.d/*.sh && 
     apt-get update && \
     apt-get install -y --no-install-recommends $PACKAGES $BUILD_PKGS && \
     gem install --no-doc r10k -v $R10K_VERSION && \
-    gem install --no-doc rugged -v $RUGGED_VERSION && \
+    gem install --no-doc rugged -v $RUGGED_VERSION -- --with-ssh && \
     dpkg -i dumb-init_"$DUMB_INIT_VERSION"_"$TARGETARCH".deb && \
     rm dumb-init_"$DUMB_INIT_VERSION"_"$TARGETARCH".deb && \
     apt remove -y $BUILD_PKGS && \

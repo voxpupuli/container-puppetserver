@@ -12,8 +12,10 @@ if [ -d /docker-custom-entrypoint.d/ ]; then
     find /docker-custom-entrypoint.d/ -type f -name "*.sh" \
         -exec chmod +x {} \;
     sync
-    find /docker-custom-entrypoint.d/ -type f -name "*.sh" \
-        -exec echo Running {} \; -exec {} \;
+    for f in /docker-custom-entrypoint.d/*.sh; do
+        echo "Running $f"
+        "$f"
+    done
 fi
 
 exec /opt/puppetlabs/bin/puppetserver "$@"

@@ -139,6 +139,11 @@ COPY conf.d/product.conf /etc/puppetlabs/puppetserver/conf.d/
 
 COPY puppetdb.conf /var/tmp/puppet/
 
+COPY enc/* /etc/puppetlabs/puppet
+COPY reports/* /opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet/reports
+RUN chmod +x /etc/puppetlabs/puppet/*.rb && \
+    chmod +x /opt/puppetlabs/puppet/lib/ruby/vendor_ruby/puppet/reports/*.rb
+
 LABEL org.label-schema.name="Puppet Server ($build_type)" \
       org.label-schema.version="$PUPPETSERVER_VERSION" \
       org.label-schema.vcs-ref="$vcs_ref" \

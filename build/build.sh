@@ -1,15 +1,27 @@
 #!/bin/bash
 
-software_version=${1:-8.6.2}
-container_version=${2:-1.0.0}
+pps_version=${1:-8.6.3}
+pp_version=${2:-8.9.0}
+container_version=${3:-1.0.1}
 
-curl -v https://downloads.puppet.com/puppet/puppetserver-${software_version}.tar.gz -o puppetserver-${software_version}.tar.gz
-tar -xvf puppetserver-${software_version}.tar.gz
+if [ -d puppetserver-${pps_version} ]; then
+  rm -rf puppetserver-${pps_version}
+fi
 
-cp Dockerfile puppetserver-${software_version}/
-cd puppetserver-${software_version}
-docker build -t puppetserver:${software_version}-v${container_version} .
+if [ -d puppet-${pp_version} ]; then
+  rm -rf puppet-${pp_version}
+fi
 
-cd -
-rm -rf puppetserver-${software_version}
-rm puppetserver-${software_version}.tar.gz
+if [ ! -f puppetserver-${pps_version}.tar.gz ]; then
+  curl -v https://downloads.puppet.com/puppet/puppetserver-${pps_version}.tar.gz -o puppetserver-${pps_version}.tar.gz
+fi
+if [ ! -f puppet-${pp_version}.tar.gz ]; then
+  curl -v https://downloads.puppet.com/puppet/puppet-${pp_version}.tar.gz -o puppet-${pp_version}.tar.gz
+fi
+
+tar -xf puppetserver-${pps_version}.tar.gz
+tar -xf puppet-${pp_version}.tar.gz
+
+# cp Dockerfile puppetserver-${pps_version}/
+# cd puppetserver-${pps_version}
+docker build -t puppetserver:${pps_version}-v${container_version} .

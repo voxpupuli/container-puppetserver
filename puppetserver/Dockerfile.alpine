@@ -1,4 +1,14 @@
-FROM alpine:3.20 AS build
+FROM alpine:3.20 AS base
+
+# Install JDK
+RUN apk update && apk upgrade \
+    && apk add openjdk17-jre-headless  \
+    && apk add --no-cache --update bash \
+    && rm -rf /var/cache/apk/*
+
+################################################################################
+
+FROM base AS build
 
 ARG VERSION=8.6.3
 ADD https://downloads.puppet.com/puppet/puppetserver-${VERSION}.tar.gz /
@@ -13,44 +23,41 @@ ENV bindir=/opt/puppetlabs/server/apps/puppetserver/bin
 ENV symbindir=/opt/puppetlabs/server/bin
 ENV uxbindir=/opt/puppetlabs/bin
 
-RUN apk update && apk upgrade \
-&& apk add --no-cache --update openjdk17-jre-headless \
-&& apk add --no-cache --update bash \
-&& cd /install \
+RUN apk update && cd /install \
 && install -d -m 0755 "${apps_dir}/puppetserver" \
 && install -d -m 0770 "${data_dir}/puppetserver" \
-&& install -m 0644 /install/puppet-server-release.jar "${apps_dir}/puppetserver" \
-&& install -m 0774 /install/ext/ezbake-functions.sh "${apps_dir}/puppetserver" \
-&& install -m 0644 /install/ext/ezbake.manifest "${apps_dir}/puppetserver" \
+&& install -m 0644 puppet-server-release.jar "${apps_dir}/puppetserver" \
+&& install -m 0774 ext/ezbake-functions.sh "${apps_dir}/puppetserver" \
+&& install -m 0644 ext/ezbake.manifest "${apps_dir}/puppetserver" \
 && install -d -m 0755 "${etc_dir}/puppetserver/conf.d" \
 && install -d -m 0755 "${etc_dir}/puppetserver/services.d" \
-&& install -m 0644 /install/ext/config/request-logging.xml "${etc_dir}/puppetserver/request-logging.xml" \
-&& install -m 0644 /install/ext/config/conf.d/puppetserver.conf "${etc_dir}/puppetserver/conf.d/puppetserver.conf" \
-&& install -m 0644 /install/ext/config/logback.xml "${etc_dir}/puppetserver/logback.xml" \
-&& install -m 0644 /install/ext/config/services.d/ca.cfg "${etc_dir}/puppetserver/services.d/ca.cfg" \
-&& install -m 0644 /install/ext/config/conf.d/global.conf "${etc_dir}/puppetserver/conf.d/global.conf" \
-&& install -m 0644 /install/ext/config/conf.d/web-routes.conf "${etc_dir}/puppetserver/conf.d/web-routes.conf" \
-&& install -m 0644 /install/ext/config/conf.d/auth.conf "${etc_dir}/puppetserver/conf.d/auth.conf" \
-&& install -m 0644 /install/ext/config/conf.d/metrics.conf "${etc_dir}/puppetserver/conf.d/metrics.conf" \
-&& install -m 0644 /install/ext/config/conf.d/ca.conf "${etc_dir}/puppetserver/conf.d/ca.conf" \
-&& install -m 0644 /install/ext/config/conf.d/webserver.conf "${etc_dir}/puppetserver/conf.d/webserver.conf" \
+&& install -m 0644 ext/config/request-logging.xml "${etc_dir}/puppetserver/request-logging.xml" \
+&& install -m 0644 ext/config/conf.d/puppetserver.conf "${etc_dir}/puppetserver/conf.d/puppetserver.conf" \
+&& install -m 0644 ext/config/logback.xml "${etc_dir}/puppetserver/logback.xml" \
+&& install -m 0644 ext/config/services.d/ca.cfg "${etc_dir}/puppetserver/services.d/ca.cfg" \
+&& install -m 0644 ext/config/conf.d/global.conf "${etc_dir}/puppetserver/conf.d/global.conf" \
+&& install -m 0644 ext/config/conf.d/web-routes.conf "${etc_dir}/puppetserver/conf.d/web-routes.conf" \
+&& install -m 0644 ext/config/conf.d/auth.conf "${etc_dir}/puppetserver/conf.d/auth.conf" \
+&& install -m 0644 ext/config/conf.d/metrics.conf "${etc_dir}/puppetserver/conf.d/metrics.conf" \
+&& install -m 0644 ext/config/conf.d/ca.conf "${etc_dir}/puppetserver/conf.d/ca.conf" \
+&& install -m 0644 ext/config/conf.d/webserver.conf "${etc_dir}/puppetserver/conf.d/webserver.conf" \
 && install -d -m 0755 "${apps_dir}/puppetserver/cli" \
 && install -d -m 0755 "${apps_dir}/puppetserver/cli/apps" \
 && install -d -m 0755 "${bindir}" \
 && install -d -m 0755 "${symbindir}" \
 && install -d -m 0755 "${uxbindir}" \
-&& install -m 0755 "/install/ext/bin/puppetserver" "${bindir}/puppetserver" \
+&& install -m 0755 "ext/bin/puppetserver" "${bindir}/puppetserver" \
 && ln -s "../apps/puppetserver/bin/puppetserver" "${symbindir}/puppetserver" \
 && ln -s "../server/apps/puppetserver/bin/puppetserver" "${uxbindir}/puppetserver" \
-&& install -m 0755 /install/ext/cli/foreground "${apps_dir}/puppetserver/cli/apps/foreground" \
-&& install -m 0755 /install/ext/cli/dropsonde "${apps_dir}/puppetserver/cli/apps/dropsonde" \
-&& install -m 0755 /install/ext/cli/ca "${apps_dir}/puppetserver/cli/apps/ca" \
-&& install -m 0755 /install/ext/cli/irb "${apps_dir}/puppetserver/cli/apps/irb" \
-&& install -m 0755 /install/ext/cli/gem "${apps_dir}/puppetserver/cli/apps/gem" \
-&& install -m 0755 /install/ext/cli/reload "${apps_dir}/puppetserver/cli/apps/reload" \
-&& install -m 0755 /install/ext/cli/ruby "${apps_dir}/puppetserver/cli/apps/ruby" \
-&& install -m 0755 /install/ext/cli/stop "${apps_dir}/puppetserver/cli/apps/stop" \
-&& install -m 0755 /install/ext/cli/start "${apps_dir}/puppetserver/cli/apps/start" \
+&& install -m 0755 ext/cli/foreground "${apps_dir}/puppetserver/cli/apps/foreground" \
+&& install -m 0755 ext/cli/dropsonde "${apps_dir}/puppetserver/cli/apps/dropsonde" \
+&& install -m 0755 ext/cli/ca "${apps_dir}/puppetserver/cli/apps/ca" \
+&& install -m 0755 ext/cli/irb "${apps_dir}/puppetserver/cli/apps/irb" \
+&& install -m 0755 ext/cli/gem "${apps_dir}/puppetserver/cli/apps/gem" \
+&& install -m 0755 ext/cli/reload "${apps_dir}/puppetserver/cli/apps/reload" \
+&& install -m 0755 ext/cli/ruby "${apps_dir}/puppetserver/cli/apps/ruby" \
+&& install -m 0755 ext/cli/stop "${apps_dir}/puppetserver/cli/apps/stop" \
+&& install -m 0755 ext/cli/start "${apps_dir}/puppetserver/cli/apps/start" \
 && install -d -m 0700 "${app_logdir}/puppetserver" \
 && install -d -m 0755 "${run_dir}/puppetserver" \
 && install -d -m 700 "${data_dir}/puppetserver/jars" \
@@ -59,11 +66,11 @@ RUN apk update && apk upgrade \
 && install -d -m=775 /opt/puppetlabs/server/data \
 && install -d "${etc_dir}/puppet/ssl" \
 && install -d "${etc_dir}/puppetserver/ca" \
-&& bash /install/ext/build-scripts/install-vendored-gems.sh
+&& bash ext/build-scripts/install-vendored-gems.sh
 
 ################################################################################
 
-FROM alpine:3.20 AS final
+FROM base AS final
 
 ARG vcs_ref
 ARG build_date
@@ -80,12 +87,11 @@ LABEL \
   org.label-schema.vendor="Voxpupuli"
 
 ENV PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
-    JAVA_ARGS=${PUPPETSERVER_JAVA_ARGS} \
     PATH=$PATH:/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin \
     SSLDIR=/etc/puppetlabs/puppet/ssl \
     LOGDIR=/var/log/puppetlabs/puppetserver \
-    PUPPETSERVER_HOSTNAME="" \
-    CERTNAME="" \
+    PUPPETSERVER_HOSTNAME="puppet" \
+    CERTNAME="puppet" \
     DNS_ALT_NAMES="" \
     PUPPETSERVER_PORT=8140 \
     AUTOSIGN=true \
@@ -122,17 +128,6 @@ ENV apps_dir=/opt/puppetlabs/server/apps \
     symbindir=/opt/puppetlabs/server/bin \
     uxbindir=/opt/puppetlabs/bin
 
-# old /etc/default/puppetserver
-# how where do i put this in the new world? 🤔
-#
-# ENV \
-#   USER="puppet" \
-#   GROUP="puppet" \
-#   INSTALL_DIR="/opt/puppetlabs/server/apps/puppetserver" \
-#   CONFIG="/etc/puppetlabs/puppetserver/conf.d" \
-#   BOOTSTRAP_CONFIG="/etc/puppetlabs/puppetserver/services.d/,/opt/puppetlabs/server/apps/puppetserver/config/services.d/" \
-#   SERVICE_STOP_RETRIES=60
-
 COPY --from=build /opt/puppetlabs /opt/puppetlabs
 COPY --from=build /etc/puppetlabs /etc/puppetlabs
 COPY --from=build /var/log/puppetlabs /var/log/puppetlabs
@@ -149,13 +144,23 @@ COPY conf.d/puppetserver.conf /etc/puppetlabs/puppetserver/conf.d/
 COPY conf.d/product.conf /etc/puppetlabs/puppetserver/conf.d/
 COPY puppetdb.conf /var/tmp/puppet/
 COPY Dockerfile /
+COPY puppetserver /etc/default/puppetserver
 
-RUN apk update && apk upgrade \
-&& apk add --no-cache --update openjdk17-jre-headless \
-&& apk add --no-cache --update bash \
+RUN apk update \
 && apk add --no-cache --update dumb-init \
 && apk add --no-cache --update openssh-client \
 && apk add --no-cache --update libssh2 \
+&& apk add --no-cache --update ruby=3.3.3-r1 \
+&& apk add --no-cache --update ruby-dev=3.3.3-r1 \
+&& apk add --no-cache --update alpine-sdk=1.0-r1 \
+&& apk add --no-cache --update openssl=3.3.2-r0 \
+&& gem install --no-doc puppet -v 8.9.0 \
+&& gem install --no-doc hocon  -v 1.4.0 \
+&& gem install --no-doc racc -v 1.8.1 \
+&& gem install --no-doc r10k -v 4.1.0 \
+&& gem install --no-doc hiera-eyaml -v 4.1.0 \
+&& gem install --no-doc puppetserver-ca -v 2.6.0 \
+&& apk del --no-cache --purge alpine-sdk \
 && addgroup -g 1001 puppet \
 && adduser -G puppet -u 1001 -h ${data_dir}/puppetserver -H -D -s /sbin/nologin puppet \
 && chown -R puppet:puppet ${etc_dir}/puppet/ssl \
@@ -170,9 +175,17 @@ RUN apk update && apk upgrade \
 && chmod 700 ${data_dir}/puppetserver/yaml \
 && find /etc/puppetlabs/puppet/ssl -type d -print0 | xargs -0 chmod 770 \
 && echo 'alias ll="ls -la --color=auto"' >> ~/.bashrc \
-&& chmod +x /docker-entrypoint.sh /healthcheck.sh /docker-entrypoint.d/*.sh
+&& chmod +x /docker-entrypoint.sh /healthcheck.sh /docker-entrypoint.d/*.sh \
+&& mkdir -p /opt/puppetlabs/puppet/bin \
+&& ln -s /usr/bin/puppet /opt/puppetlabs/puppet/bin/puppet \
+&& ln -s /usr/bin/facter /opt/puppetlabs/puppet/bin/facter \
+&& ln -s /usr/bin/ruby /opt/puppetlabs/puppet/bin/ruby \
+&& ln -s /usr/bin/gem /opt/puppetlabs/puppet/bin/gem \
+&& ln -s /usr/bin/irb /opt/puppetlabs/puppet/bin/irb \
+&& ln -s /usr/bin/erb /opt/puppetlabs/puppet/bin/erb \
+&& ln -s /usr/bin/r10k /opt/puppetlabs/puppet/bin/r10k \
+&& ln -s /usr/bin/hiera-eyaml /opt/puppetlabs/puppet/bin/hiera-eyaml
 
-# gem install --no-doc r10k -v $R10K_VERSION && \
 # gem install --no-doc rugged -v $RUGGED_VERSION -- --with-ssh && \
 
 # k8s uses livenessProbe, startupProbe, readinessProbe and ignores HEALTHCHECK

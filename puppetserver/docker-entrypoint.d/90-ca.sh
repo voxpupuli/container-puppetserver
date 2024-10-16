@@ -60,7 +60,7 @@ else
       exit 99
     fi
 
-    if [[ -f /etc/puppetlabs/puppet/ssl/certs/ca.pem ]]; then
+    if [[ -f /etc/puppetlabs/puppetserver/ca/ca_crt.pem ]]; then
       echo "CA already imported."
     else
       puppetserver ca import \

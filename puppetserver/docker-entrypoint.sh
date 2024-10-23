@@ -28,8 +28,10 @@ pre_execution_handler() {
       -exec chmod +x {} \;
     sync
     for f in /docker-custom-entrypoint.d/*.sh; do
-      echo "Running $f"
-      "$f"
+      if [[ -f "$f" && -x $(realpath "$f") ]]; then
+        echo "Running $f"
+        "$f"
+      fi
     done
   fi
 }
@@ -42,8 +44,10 @@ post_startup_handler() {
         -exec chmod +x {} \;
       sync
       for f in /docker-custom-entrypoint.d/post-startup/*.sh; do
-        echo "Running $f"
-        "$f"
+        if [[ -f "$f" && -x $(realpath "$f") ]]; then
+          echo "Running $f"
+          "$f"
+        fi
       done
     fi
   fi
@@ -57,8 +61,10 @@ post_execution_handler() {
         -exec chmod +x {} \;
       sync
       for f in /docker-custom-entrypoint.d/post-execution/*.sh; do
-        echo "Running $f"
-        "$f"
+        if [[ -f "$f" && -x $(realpath "$f") ]]; then
+          echo "Running $f"
+          "$f"
+        fi
       done
     fi
   fi
@@ -79,8 +85,10 @@ sigterm_handler() {
           -exec chmod +x {} \;
         sync
         for f in /docker-custom-entrypoint.d/sigterm-handler/*.sh; do
-          echo "Running $f"
-          "$f"
+          if [[ -f "$f" && -x $(realpath "$f") ]]; then
+            echo "Running $f"
+            "$f"
+          fi
         done
       fi
     fi

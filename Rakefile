@@ -15,6 +15,7 @@ else
     config.user = 'voxpupuli'
     config.project = 'container-puppetserver'
     # get branch name from git and strip off any prefixes (e.g. 'release-')
+    config.since_tag = '7.13.0'
     config.future_release = `git rev-parse --abbrev-ref HEAD`.strip.split('-', 2).last
   end
 end

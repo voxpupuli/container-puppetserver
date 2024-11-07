@@ -45,31 +45,56 @@ else
   hocon -f /etc/puppetlabs/puppetserver/conf.d/ca.conf \
     set certificate-authority.allow-subject-alt-names "${CA_ALLOW_SUBJECT_ALT_NAMES}"
 
-  new_cadir=/etc/puppetlabs/puppetserver/ca
+  if [[ "$INTERMEDIATE_CA" == "true" ]]; then
+    # sanity check
+    if [[ -z $INTERMEDIATE_CA_BUNDLE ]]; then
+      echo 'Error: When enabling intermediate ca, one MUST specify INTERMEDIATE_CA_BUNDLE'
+      exit 99
+    fi
+    if [[ -z $INTERMEDIATE_CRL_CHAIN ]]; then
+      echo 'Error: When enabling intermediate ca, one MUST specify INTERMEDIATE_CRL_CHAIN'
+      exit 99
+    fi
+    if [[ -z $INTERMEDIATE_CA_KEY ]]; then
+      echo 'Error: When enabling intermediate ca, one MUST specify INTERMEDIATE_CA_KEY'
+      exit 99
+    fi
 
-  if [ ! -f "$new_cadir/ca_crt.pem" ] && [ ! -f "$SSLDIR/ca/ca_crt.pem" ]; then
-      # There is no existing CA
+    if [[ -f /etc/puppetlabs/puppetserver/ca/ca_crt.pem ]]; then
+      echo "CA already imported."
+    else
+      puppetserver ca import \
+        --cert-bundle $INTERMEDIATE_CA_BUNDLE \
+        --crl-chain $INTERMEDIATE_CRL_CHAIN \
+        --private-key $INTERMEDIATE_CA_KEY
+    fi
+  else
+    new_cadir=/etc/puppetlabs/puppetserver/ca
 
-      # Append user-supplied DNS Alt Names
-      if [ -n "$DNS_ALT_NAMES" ]; then
-          current="$(puppet config print --section main dns_alt_names)"
-          # shell parameter expansion to remove trailing comma if there is one
-          updated="${DNS_ALT_NAMES%,}"
-          if [ -n "$current" ]; then updated="$current","$updated"; fi
-          puppet config set --section main dns_alt_names "$updated"
-      fi
+    if [ ! -f "$new_cadir/ca_crt.pem" ] && [ ! -f "$SSLDIR/ca/ca_crt.pem" ]; then
+        # There is no existing CA
 
-      timestamp="$(date '+%Y-%m-%d %H:%M:%S %z')"
-      ca_name="Puppet CA generated on ${HOSTNAME} at $timestamp"
+        # Append user-supplied DNS Alt Names
+        if [ -n "$DNS_ALT_NAMES" ]; then
+            current="$(puppet config print --section main dns_alt_names)"
+            # shell parameter expansion to remove trailing comma if there is one
+            updated="${DNS_ALT_NAMES%,}"
+            if [ -n "$current" ]; then updated="$current","$updated"; fi
+            puppet config set --section main dns_alt_names "$updated"
+        fi
 
-      # See puppet.conf file for relevant settings
-      puppetserver ca setup \
-          --ca-name "$ca_name" \
-          --config /etc/puppetlabs/puppet/puppet.conf
+        timestamp="$(date '+%Y-%m-%d %H:%M:%S %z')"
+        ca_name="Puppet CA generated on ${HOSTNAME} at $timestamp"
 
-  elif [ ! -f "$new_cadir/ca_crt.pem" ] && [ -f "$SSLDIR/ca/ca_crt.pem" ]; then
-      # Legacy CA upgrade
-      puppetserver ca migrate \
-          --config /etc/puppetlabs/puppet/puppet.conf
+        # See puppet.conf file for relevant settings
+        puppetserver ca setup \
+            --ca-name "$ca_name" \
+            --config /etc/puppetlabs/puppet/puppet.conf
+
+    elif [ ! -f "$new_cadir/ca_crt.pem" ] && [ -f "$SSLDIR/ca/ca_crt.pem" ]; then
+        # Legacy CA upgrade
+        puppetserver ca migrate \
+            --config /etc/puppetlabs/puppet/puppet.conf
+    fi
   fi
 fi

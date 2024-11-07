@@ -1,56 +1,82 @@
 ---
-on:
-  pull_request: {}
-  push:
-    branches:
-      - main
+name: CI🚦
 
-name: CI
+on:
+  pull_request:
+    branches:
+      - 'main'
+  workflow_dispatch:
 
 jobs:
+  setup-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Source checkout
+        uses: actions/checkout@v4
+
+      - id: set-matrix
+        run: echo "matrix=$(jq -c . build_versions.json)" >> $GITHUB_OUTPUT
+
   general_ci:
     uses: voxpupuli/crafty/.github/workflows/general_ci.yaml@main
     with:
       shellcheck_scan_dir: './puppetserver'
 
-  build_docker_image:
-    name: 'Built test Docker image'
+  build_test_container:
+    name: 'Build test container'
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 'puppetserver'
     permissions:
       actions: read
       contents: read
       security-events: write
+      pull-requests: write
+    needs: setup-matrix
+    strategy:
+      matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Docker image
+      - name: Build image
         uses: docker/build-push-action@v6
         with:
+          tags: 'ci/puppetserver:${{ matrix.version }}'
           context: puppetserver
-          tags: 'ci/puppetserver:${{ github.sha }}'
           push: false
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'ci/puppetserver:${{ github.sha }}'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: 'trivy-results.sarif'
+          build-args: |
+            PUPPET_RELEASE=${{ matrix.release }}
+            PUPPETSERVER_VERSION=${{ matrix.version }}
+            R10K_VERSION=${{ matrix.r10k_version }}
+            RUGGED_VERSION=${{ matrix.rugged_version }}
 
   tests:
     needs:
       - general_ci
-      - build_docker_image
+      - build_test_container
     runs-on: ubuntu-latest
     name: Test suite
     steps:
       - run: echo Test suite completed
+
+  dependabot:
+    permissions:
+      contents: write
+    name: 'Dependabot auto-merge'
+    needs:
+      - tests
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'}}
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2.2.0
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

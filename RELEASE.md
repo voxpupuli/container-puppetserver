@@ -28,7 +28,7 @@ Then open a PR, discuss and merge.
 
 ```shell
 git switch main
-git pull -r
+git pull --rebase
 git tag v$RELEASE_VERSION -m "v$RELEASE_VERSION"
 git push --tags
 ```

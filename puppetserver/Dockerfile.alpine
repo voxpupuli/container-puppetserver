@@ -148,12 +148,12 @@ COPY puppetserver /etc/default/puppetserver
 
 RUN apk update \
 && apk add --no-cache --update dumb-init \
+&& apk add --no-cache --update alpine-sdk \
 && apk add --no-cache --update openssh-client \
+&& apk add --no-cache --update openssl \
 && apk add --no-cache --update libssh2 \
 && apk add --no-cache --update ruby=3.3.3-r1 \
 && apk add --no-cache --update ruby-dev=3.3.3-r1 \
-&& apk add --no-cache --update alpine-sdk=1.0-r1 \
-&& apk add --no-cache --update openssl=3.3.2-r0 \
 && gem install --no-doc puppet -v 8.9.0 \
 && gem install --no-doc hocon  -v 1.4.0 \
 && gem install --no-doc racc -v 1.8.1 \

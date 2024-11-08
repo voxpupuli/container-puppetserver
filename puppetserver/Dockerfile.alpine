@@ -10,9 +10,8 @@ RUN apk update && apk upgrade \
 
 FROM base AS build
 
-ARG VERSION=8.6.3
-ADD https://downloads.puppet.com/puppet/puppetserver-${VERSION}.tar.gz /
-RUN tar -xzf /puppetserver-${VERSION}.tar.gz && mv /puppetserver-${VERSION} /install
+ARG SERVER_VERSION=8.7.0
+ADD https://downloads.puppet.com/puppet/puppetserver-${SERVER_VERSION}.tar.gz /
 
 ENV apps_dir=/opt/puppetlabs/server/apps
 ENV app_logdir=/var/log/puppetlabs
@@ -23,7 +22,9 @@ ENV bindir=/opt/puppetlabs/server/apps/puppetserver/bin
 ENV symbindir=/opt/puppetlabs/server/bin
 ENV uxbindir=/opt/puppetlabs/bin
 
-RUN apk update && cd /install \
+RUN apk update \
+&& tar -xzf /puppetserver-${SERVER_VERSION}.tar.gz \
+&& cd /puppetserver-${SERVER_VERSION} \
 && install -d -m 0755 "${apps_dir}/puppetserver" \
 && install -d -m 0770 "${data_dir}/puppetserver" \
 && install -m 0644 puppet-server-release.jar "${apps_dir}/puppetserver" \
@@ -31,6 +32,8 @@ RUN apk update && cd /install \
 && install -m 0644 ext/ezbake.manifest "${apps_dir}/puppetserver" \
 && install -d -m 0755 "${etc_dir}/puppetserver/conf.d" \
 && install -d -m 0755 "${etc_dir}/puppetserver/services.d" \
+&& install -d -m 0755 "${apps_dir}/puppetserver/config/services.d" \
+&& install -m 0644 ext/system-config/services.d/bootstrap.cfg "${apps_dir}/puppetserver/config/services.d/bootstrap.cfg" \
 && install -m 0644 ext/config/request-logging.xml "${etc_dir}/puppetserver/request-logging.xml" \
 && install -m 0644 ext/config/conf.d/puppetserver.conf "${etc_dir}/puppetserver/conf.d/puppetserver.conf" \
 && install -m 0644 ext/config/logback.xml "${etc_dir}/puppetserver/logback.xml" \
@@ -58,6 +61,7 @@ RUN apk update && cd /install \
 && install -m 0755 ext/cli/ruby "${apps_dir}/puppetserver/cli/apps/ruby" \
 && install -m 0755 ext/cli/stop "${apps_dir}/puppetserver/cli/apps/stop" \
 && install -m 0755 ext/cli/start "${apps_dir}/puppetserver/cli/apps/start" \
+&& install -m 0755 ext/cli_defaults/cli-defaults.sh "${apps_dir}/puppetserver/cli" \
 && install -d -m 0700 "${app_logdir}/puppetserver" \
 && install -d -m 0755 "${run_dir}/puppetserver" \
 && install -d -m 700 "${data_dir}/puppetserver/jars" \

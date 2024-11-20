@@ -69,6 +69,7 @@ RUN apk update \
 && install -d /opt/puppetlabs/server/data/puppetserver/jruby-gems \
 && install -d -m=775 /opt/puppetlabs/server/data \
 && install -d "${etc_dir}/puppet/ssl" \
+&& install -d -m=755 "${etc_dir}/code" \
 && install -d "${etc_dir}/puppetserver/ca" \
 && bash ext/build-scripts/install-vendored-gems.sh
 
@@ -156,17 +157,21 @@ RUN apk update \
 && apk add --no-cache --update openssh-client \
 && apk add --no-cache --update openssl \
 && apk add --no-cache --update libssh2 \
-&& apk add --no-cache --update ruby=3.3.3-r1 \
-&& apk add --no-cache --update ruby-dev=3.3.3-r1 \
-&& gem install --no-doc puppet -v 8.9.0 \
+&& apk add --no-cache --update ruby \
+&& apk add --no-cache --update ruby-dev \
+# && apk add --no-cache --update cmake \
+# install puppet gem as agent into system ruby
+&& gem install --no-doc puppet -v 8.10.0 \
 && gem install --no-doc hocon  -v 1.4.0 \
 && gem install --no-doc racc -v 1.8.1 \
 && gem install --no-doc r10k -v 4.1.0 \
 && gem install --no-doc hiera-eyaml -v 4.1.0 \
 && gem install --no-doc puppetserver-ca -v 2.6.0 \
+# && gem install --no-doc rugged -- --with-ssh \
 && apk del --no-cache --purge alpine-sdk \
 && addgroup -g 1001 puppet \
 && adduser -G puppet -u 1001 -h ${data_dir}/puppetserver -H -D -s /sbin/nologin puppet \
+&& chown -R puppet:puppet ${etc_dir}/code \
 && chown -R puppet:puppet ${etc_dir}/puppet/ssl \
 && chown -R puppet:puppet ${etc_dir}/puppetserver/ca \
 && chown -R puppet:puppet ${app_logdir}/puppetserver \
@@ -188,9 +193,9 @@ RUN apk update \
 && ln -s /usr/bin/irb /opt/puppetlabs/puppet/bin/irb \
 && ln -s /usr/bin/erb /opt/puppetlabs/puppet/bin/erb \
 && ln -s /usr/bin/r10k /opt/puppetlabs/puppet/bin/r10k \
-&& ln -s /usr/bin/hiera-eyaml /opt/puppetlabs/puppet/bin/hiera-eyaml
-
-# gem install --no-doc rugged -v $RUGGED_VERSION -- --with-ssh && \
+&& ln -s /usr/bin/hiera-eyaml /opt/puppetlabs/puppet/bin/hiera-eyaml \
+# install puppet gem as library into jruby loadpath
+&& puppetserver gem install puppet
 
 # k8s uses livenessProbe, startupProbe, readinessProbe and ignores HEALTHCHECK
 HEALTHCHECK --interval=20s --timeout=15s --retries=12 --start-period=3m CMD ["/healthcheck.sh"]

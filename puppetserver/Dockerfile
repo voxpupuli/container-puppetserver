@@ -1,13 +1,21 @@
-FROM ubuntu:22.04
+FROM ubuntu:22.04 AS builder
+
+ARG BUILD_PKGS="ruby3.0-dev gcc make cmake pkg-config libssl-dev libc6-dev libssh2-1-dev"
+ARG R10K_VERSION=4.1.0
+ARG RUGGED_VERSION=1.7.2
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends $BUILD_PKGS && \
+    gem install --no-doc r10k -v $R10K_VERSION && \
+    gem install --no-doc rugged -v $RUGGED_VERSION -- --with-ssh
+
+FROM ubuntu:22.04 AS final
 
 ARG vcs_ref
 ARG build_type
 ARG build_date
 ARG PACKAGES="ca-certificates git netbase openjdk-17-jre-headless ruby3.0 openssh-client libssh2-1 dumb-init"
-ARG BUILD_PKGS="ruby3.0-dev gcc make cmake pkg-config libssl-dev libc6-dev libssh2-1-dev"
 ARG TARGETARCH
-ARG R10K_VERSION=4.1.0
-ARG RUGGED_VERSION=1.7.2
 ARG PUPPET_RELEASE=8
 ARG PUPPETSERVER_VERSION=8.6.1
 ARG UBUNTU_CODENAME=jammy
@@ -62,29 +70,25 @@ ENV PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
 
 COPY docker-entrypoint.sh \
      healthcheck.sh \
+     add_cache_del_api_auth_rules.rb \
+     metrics.conf.tmpl \
+     Dockerfile \
      /
+
 COPY docker-entrypoint.d /docker-entrypoint.d
-COPY metrics.conf.tmpl /metrics.conf.tmpl
-COPY add_cache_del_api_auth_rules.rb /add_cache_del_api_auth_rules.rb
-COPY Dockerfile /
+COPY --from=builder /var/lib/gems/ /var/lib/gems/
+COPY --from=builder /usr/local/bin/r10k /usr/local/bin/
 
 ADD https://apt.puppet.com/${PUPPET_DEB} /${PUPPET_DEB}
 
-# Create puppet user and group with PUPPET_USER_UID and PUPPET_USER_GID
 RUN groupadd -g ${PUPPET_USER_GID} puppet && \
-    useradd -m -u ${PUPPET_USER_UID} -g puppet puppet
-
-# no need to pin versions or clear apt cache as its still being used
-# hadolint ignore=DL3008,DL3009
-RUN dpkg -i /${PUPPET_DEB} && \
+    useradd -m -u ${PUPPET_USER_UID} -g puppet puppet && \
+    dpkg -i /${PUPPET_DEB} && \
     rm /${PUPPET_DEB} && \
     chmod +x /docker-entrypoint.sh /healthcheck.sh /docker-entrypoint.d/*.sh && \
     apt-get update && \
-    apt-get install -y --no-install-recommends $PACKAGES $BUILD_PKGS && \
-    gem install --no-doc r10k -v $R10K_VERSION && \
-    gem install --no-doc rugged -v $RUGGED_VERSION -- --with-ssh && \
-    apt remove -y $BUILD_PKGS && \
-    apt-get install --no-install-recommends -y puppetserver=${PUPPETSERVER_VERSION}-1${UBUNTU_CODENAME} puppetdb-termini && \
+    apt-get upgrade -y && \
+    apt-get install --no-install-recommends -y $PACKAGES puppetserver=${PUPPETSERVER_VERSION}-1${UBUNTU_CODENAME} puppetdb-termini && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
@@ -92,13 +96,16 @@ RUN dpkg -i /${PUPPET_DEB} && \
     cp -pr /opt/puppetlabs/server/data/puppetserver /var/tmp && \
     rm -rf /var/tmp/puppet/ssl
 
+# needs to be copied after package installation
 COPY puppetserver /etc/default/puppetserver
 COPY logback.xml \
-      request-logging.xml \
-      /etc/puppetlabs/puppetserver/
+     request-logging.xml \
+     /etc/puppetlabs/puppetserver/
 
-COPY conf.d/puppetserver.conf /etc/puppetlabs/puppetserver/conf.d/
-COPY conf.d/product.conf /etc/puppetlabs/puppetserver/conf.d/
+COPY conf.d/puppetserver.conf \
+     conf.d/product.conf \
+     /etc/puppetlabs/puppetserver/conf.d/
+
 COPY puppetdb.conf /var/tmp/puppet/
 
 # k8s uses livenessProbe, startupProbe, readinessProbe and ignores HEALTHCHECK

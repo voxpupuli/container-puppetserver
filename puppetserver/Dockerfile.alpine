@@ -11,7 +11,9 @@ RUN apk update && apk upgrade \
 FROM base AS build
 
 ARG SERVER_VERSION=8.7.0
+ARG DB_VERSION=8.8.1
 ADD https://downloads.puppet.com/puppet/puppetserver-${SERVER_VERSION}.tar.gz /
+ADD https://downloads.puppet.com/puppetdb/puppetdb-${DB_VERSION}.tar.gz /
 
 ENV apps_dir=/opt/puppetlabs/server/apps
 ENV app_logdir=/var/log/puppetlabs
@@ -21,9 +23,11 @@ ENV run_dir=/var/run/puppetlabs
 ENV bindir=/opt/puppetlabs/server/apps/puppetserver/bin
 ENV symbindir=/opt/puppetlabs/server/bin
 ENV uxbindir=/opt/puppetlabs/bin
+ENV rubylibdir=/opt/puppetlabs/puppet/lib/ruby/vendor_ruby
 
 RUN apk update \
 && tar -xzf /puppetserver-${SERVER_VERSION}.tar.gz \
+&& tar -xzf /puppetdb-${DB_VERSION}.tar.gz \
 && cd /puppetserver-${SERVER_VERSION} \
 && install -d -m 0755 "${apps_dir}/puppetserver" \
 && install -d -m 0770 "${data_dir}/puppetserver" \
@@ -71,7 +75,25 @@ RUN apk update \
 && install -d "${etc_dir}/puppet/ssl" \
 && install -d -m=755 "${etc_dir}/code" \
 && install -d "${etc_dir}/puppetserver/ca" \
-&& bash ext/build-scripts/install-vendored-gems.sh
+&& bash ext/build-scripts/install-vendored-gems.sh \
+### puppetdb-termini
+&& cd /puppetdb-${DB_VERSION} \
+&& install -Dm 0644 puppet/face/node/deactivate.rb "${rubylibdir}/puppet/face/node/deactivate.rb" \
+&& install -Dm 0644 puppet/face/node/status.rb "${rubylibdir}/puppet/face/node/status.rb" \
+&& install -Dm 0644 puppet/functions/puppetdb_query.rb "${rubylibdir}/puppet/functions/puppetdb_query.rb" \
+&& install -Dm 0644 puppet/indirector/catalog/puppetdb.rb "${rubylibdir}/puppet/indirector/catalog/puppetdb.rb" \
+&& install -Dm 0644 puppet/indirector/facts/puppetdb_apply.rb "${rubylibdir}/puppet/indirector/facts/puppetdb_apply.rb" \
+&& install -Dm 0644 puppet/indirector/facts/puppetdb.rb "${rubylibdir}/puppet/indirector/facts/puppetdb.rb" \
+&& install -Dm 0644 puppet/indirector/node/puppetdb.rb "${rubylibdir}/puppet/indirector/node/puppetdb.rb" \
+&& install -Dm 0644 puppet/indirector/resource/puppetdb.rb "${rubylibdir}/puppet/indirector/resource/puppetdb.rb" \
+&& install -Dm 0644 puppet/reports/puppetdb.rb "${rubylibdir}/puppet/reports/puppetdb.rb" \
+&& install -Dm 0644 puppet/util/puppetdb.rb "${rubylibdir}/puppet/util/puppetdb.rb" \
+&& install -Dm 0644 puppet/util/puppetdb/atom.rb "${rubylibdir}/puppet/util/puppetdb/atom.rb" \
+&& install -Dm 0644 puppet/util/puppetdb/char_encoding.rb "${rubylibdir}/puppet/util/puppetdb/char_encoding.rb" \
+&& install -Dm 0644 puppet/util/puppetdb/command_names.rb "${rubylibdir}/puppet/util/puppetdb/command_names.rb" \
+&& install -Dm 0644 puppet/util/puppetdb/command.rb "${rubylibdir}/puppet/util/puppetdb/command.rb" \
+&& install -Dm 0644 puppet/util/puppetdb/config.rb "${rubylibdir}/puppet/util/puppetdb/config.rb" \
+&& install -Dm 0644 puppet/util/puppetdb/http.rb "${rubylibdir}/puppet/util/puppetdb/http.rb"
 
 ################################################################################
 

@@ -12,6 +12,7 @@ FROM base AS build
 
 ARG SERVER_VERSION=8.7.0
 ARG DB_VERSION=8.8.1
+
 ADD https://downloads.puppet.com/puppet/puppetserver-${SERVER_VERSION}.tar.gz /
 ADD https://downloads.puppet.com/puppetdb/puppetdb-${DB_VERSION}.tar.gz /
 
@@ -144,9 +145,9 @@ ENV PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
     PUPPETSERVER_ENABLE_ENV_CACHE_DEL_API=true \
     ENVIRONMENTPATH=/etc/puppetlabs/code/environments \
     HIERACONFIG='$confdir/hiera.yaml' \
-    CSR_ATTRIBUTES='{}'
-
-ENV apps_dir=/opt/puppetlabs/server/apps \
+    CSR_ATTRIBUTES='{}' \
+    ### build variables
+    apps_dir=/opt/puppetlabs/server/apps \
     app_logdir=/var/log/puppetlabs \
     data_dir=/opt/puppetlabs/server/data \
     etc_dir=/etc/puppetlabs \
@@ -160,17 +161,19 @@ COPY --from=build /etc/puppetlabs /etc/puppetlabs
 COPY --from=build /var/log/puppetlabs /var/log/puppetlabs
 COPY --from=build /var/run/puppetlabs /var/run/puppetlabs
 
-COPY docker-entrypoint.sh /
-COPY healthcheck.sh /
+COPY docker-entrypoint.sh \
+     healthcheck.sh \
+     Dockerfile \
+     metrics.conf.tmpl \
+     add_cache_del_api_auth_rules.rb \
+     /
+
 COPY docker-entrypoint.d /docker-entrypoint.d
-COPY metrics.conf.tmpl /metrics.conf.tmpl
-COPY add_cache_del_api_auth_rules.rb /add_cache_del_api_auth_rules.rb
 COPY logback.xml /etc/puppetlabs/puppetserver/
 COPY request-logging.xml /etc/puppetlabs/puppetserver/
 COPY conf.d/puppetserver.conf /etc/puppetlabs/puppetserver/conf.d/
 COPY conf.d/product.conf /etc/puppetlabs/puppetserver/conf.d/
 COPY puppetdb.conf /var/tmp/puppet/
-COPY Dockerfile /
 COPY puppetserver /etc/default/puppetserver
 
 RUN apk update \

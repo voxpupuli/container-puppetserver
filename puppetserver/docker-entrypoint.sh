@@ -19,10 +19,25 @@ echoerr "Entrypoint PID $$"
 
 ## Pre execution handler
 pre_execution_handler() {
+  if [ -d /docker-custom-entrypoint.d/ ]; then
+    if [ -d /docker-custom-entrypoint.d/pre-default/ ]; then
+      find /docker-custom-entrypoint.d/pre-default/ -type f -name "*.sh" \
+        -exec chmod +x {} \;
+      sync
+      for f in /docker-custom-entrypoint.d/pre-default/*.sh; do
+        if [[ -f "$f" && -x $(realpath "$f") ]]; then
+          echo "Running $f"
+          "$f"
+        fi
+      done
+    fi
+  fi
+
   for f in /docker-entrypoint.d/*.sh; do
     echo "Running $f"
     "$f"
   done
+
   if [ -d /docker-custom-entrypoint.d/ ]; then
     find /docker-custom-entrypoint.d/ -type f -name "*.sh" \
       -exec chmod +x {} \;

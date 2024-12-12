@@ -121,7 +121,7 @@ The following environment variables are supported:
 | __PUPPETSERVER_ENABLE_ENV_CACHE_DEL_API__  | Enable the puppet admin api endpoint via certificates to allow clearing environment caches<br><br> Defaults to `true`                                         |
 | __ENVIRONMENTPATH__                        | Set an environmentpath<br><br> Defaults to `/etc/puppetlabs/code/environments`                                                                                |
 | __HIERACONFIG__                            | Set a hiera_config entry in puppet.conf file<br><br> Defaults to `$confdir/hiera.yaml`                                                                        |
-| __CSR_ATTRIBUTES__                         | Provide a JSON string of the csr_attributes.yaml content. e.g. `CSR_ATTRIBUTES='{"custom_attributes": { "challengePassword": "foobar" }, "extension_requests": { "pp_project": "foo" } }'`<br><br> Defaults to empty JSON object `{}`<br> Please note that within a compose file, you must provide all environment variables as Hash and not as Array!<br> environment:<br> `CSR_ATTRIBUTES: '{"extension_request": {...}}'` |
+| __CSR_ATTRIBUTES__                         | Provide a JSON string of the csr_attributes.yaml content. e.g. `CSR_ATTRIBUTES='{"custom_attributes": { "challengePassword": "foobar" }, "extension_requests": { "pp_project": "foo" } }'`<br><br> Please note that within a compose file, you must provide all environment variables as Hash and not as Array!<br> environment:<br> `CSR_ATTRIBUTES: '{"extension_request": {...}}'` |
 
 ## Initialization Scripts
 
@@ -129,6 +129,7 @@ If you would like to do additional initialization, add a directory called `/dock
 
 You can also create sub-directories in `/docker-custom-entrypoint.d/` for scripts that have to run at different stages.
 
+- `/docker-custom-entrypoint.d/pre-default/` - scripts that run before the default entrypoint scripts from this repo run.
 - `/docker-custom-entrypoint.d/` - scripts that run after the default entrypoint scripts, but before the puppetserver service is started.
 - `/docker-custom-entrypoint.d/post-startup/` - scripts that run after the puppetserver service is started.
 - `/docker-custom-entrypoint.d/sigterm-handler/` - scripts that run when the container receives a SIGTERM signal.

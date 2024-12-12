@@ -65,7 +65,7 @@ ENV PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
     PUPPETSERVER_ENABLE_ENV_CACHE_DEL_API=true \
     ENVIRONMENTPATH=/etc/puppetlabs/code/environments \
     HIERACONFIG='$confdir/hiera.yaml' \
-    CSR_ATTRIBUTES='{}' \
+    CSR_ATTRIBUTES="" \
     PUPPET_DEB=puppet${PUPPET_RELEASE}-release-${UBUNTU_CODENAME}.deb
 
 COPY docker-entrypoint.sh \

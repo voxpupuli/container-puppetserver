@@ -49,6 +49,7 @@ ENV PUPPETSERVER_JAVA_ARGS="-Xms1024m -Xmx1024m" \
     CA_HOSTNAME=puppet \
     CA_PORT=8140 \
     CA_ALLOW_SUBJECT_ALT_NAMES=false \
+    CA_TTL=157680000 \
     INTERMEDIATE_CA=false \
     INTERMEDIATE_CA_BUNDLE=/etc/puppetlabs/intermediate/ca.pem \
     INTERMEDIATE_CRL_CHAIN=/etc/puppetlabs/intermediate/crl.pem \

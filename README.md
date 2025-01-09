@@ -97,6 +97,7 @@ The following environment variables are supported:
 | __PUPPETSERVER_PORT__                      | The port of the puppetserver<br><br>`8140`                                                                                                                    |
 | __AUTOSIGN__                               | Whether or not to enable autosigning on the puppetserver instance. Valid values are `true`, `false`, and `/path/to/autosign.conf`.<br><br>Defaults to `true`. |
 | __CA_ENABLED__                             | Whether or not this puppetserver instance has a running CA (Certificate Authority)<br><br>`true`                                                              |
+| __CA_TTL__                                 | CA expire date (in seconds or with suffix `s`, `m`, `h`, `d`, `y`)<br><br>`157680000`                                                                         |
 | __CA_HOSTNAME__                            | The DNS hostname for the puppetserver running the CA. Does nothing unless `CA_ENABLED=false`<br><br>`puppet`                                                  |
 | __CA_PORT__                                | The listening port of the CA. Does nothing unless `CA_ENABLED=false`<br><br>`8140`                                                                            |
 | __CA_ALLOW_SUBJECT_ALT_NAMES__             | Whether or not SSL certificates containing Subject Alternative Names should be signed by the CA. Does nothing unless `CA_ENABLED=true`.<br><br>`false`        |

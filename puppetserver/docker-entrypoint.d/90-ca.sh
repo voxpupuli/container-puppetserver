@@ -32,6 +32,8 @@ EOF
   hocon -f webserver.conf set webserver.ssl-crl-path $ssl_crl_path
   cd /
 
+  puppet config set --section server ca_ttl "${CA_TTL}"
+
   # bootstrap certs for the puppetserver
   if [[ ! -f "$ssl_cert" ]]; then
     while ! ca_running; do

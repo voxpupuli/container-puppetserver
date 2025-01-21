@@ -32,8 +32,6 @@ EOF
   hocon -f webserver.conf set webserver.ssl-crl-path $ssl_crl_path
   cd /
 
-  puppet config set --section server ca_ttl "${CA_TTL}"
-
   # bootstrap certs for the puppetserver
   if [[ ! -f "$ssl_cert" ]]; then
     while ! ca_running; do
@@ -44,6 +42,7 @@ EOF
   fi
 else
   # we are the CA
+  puppet config set --section server ca_ttl "${CA_TTL}"
   hocon -f /etc/puppetlabs/puppetserver/conf.d/ca.conf \
     set certificate-authority.allow-subject-alt-names "${CA_ALLOW_SUBJECT_ALT_NAMES}"
 

@@ -1,5 +1,11 @@
 # Voxpupuli Puppet Server container
 
+# ⚠️ Deprecated ⚠️
+
+This repository is deprecated and will be archived soon. Please use the [OpenVox Server container](https://github.com/OpenVoxProject/container-openvoxserver) instead.
+
+---
+
 [![CI](https://github.com/voxpupuli/container-puppetserver/actions/workflows/ci.yaml/badge.svg)](https://github.com/voxpupuli/container-puppetserver/actions/workflows/ci.yaml)
 [![License](https://img.shields.io/github/license/voxpupuli/container-puppetserver.svg)](https://github.com/voxpupuli/container-puppetserver/blob/main/LICENSE)
 [![Donated by Puppet](https://img.shields.io/badge/Donated%20by-Puppet-blue.svg)](https://www.puppet.com)
@@ -16,10 +22,6 @@
   - [How to Release the container](#how-to-release-the-container)
   - [How to contribute](#how-to-contribute)
   - [Transfer Notice](#transfer-notice)
-
----
-
-__⚠️ Attention ⚠️__: the container name `voxpupuli/container-puppetserver` will be deprecated in 2025-02 and might be removed in the future. Please use `voxpupuli/puppetserver` instead.
 
 ---
 

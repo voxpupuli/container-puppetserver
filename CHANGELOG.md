@@ -2,6 +2,55 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.7.0](https://github.com/voxpupuli/container-puppetserver/tree/v1.7.0) (2025-01-31)
+
+[Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/v1.6.0...v1.7.0)
+
+**Implemented enhancements:**
+
+- refactor: rebuild Dockerfile [\#129](https://github.com/voxpupuli/container-puppetserver/issues/129)
+- Manage ca\_ttl setting [\#145](https://github.com/voxpupuli/container-puppetserver/pull/145) ([tuxmea](https://github.com/tuxmea))
+- Feature/updates vrt [\#142](https://github.com/voxpupuli/container-puppetserver/pull/142) ([zipkid](https://github.com/zipkid))
+- Feature/puppet masterport setting [\#137](https://github.com/voxpupuli/container-puppetserver/pull/137) ([zipkid](https://github.com/zipkid))
+- feat: update to puppetserver 7.17.3 and 8.7.0 [\#136](https://github.com/voxpupuli/container-puppetserver/pull/136) ([rwaffen](https://github.com/rwaffen))
+- Ensure the entrypoint script does not fail. [\#135](https://github.com/voxpupuli/container-puppetserver/pull/135) ([zipkid](https://github.com/zipkid))
+- feat: add support for custom scripts in /docker-entrypoint.d and run custom scripts in order [\#133](https://github.com/voxpupuli/container-puppetserver/pull/133) ([zipkid](https://github.com/zipkid))
+- feat: update health check to better find certs for curl [\#131](https://github.com/voxpupuli/container-puppetserver/pull/131) ([rwaffen](https://github.com/rwaffen))
+- Add libssh2 to give rugged for R10K ssh capabilities [\#128](https://github.com/voxpupuli/container-puppetserver/pull/128) ([zipkid](https://github.com/zipkid))
+- Don't let the entry scripts fail if there is no cert \(dir\) [\#127](https://github.com/voxpupuli/container-puppetserver/pull/127) ([zipkid](https://github.com/zipkid))
+- feat: set puppet uid/gid in container build [\#125](https://github.com/voxpupuli/container-puppetserver/pull/125) ([zipkid](https://github.com/zipkid))
+- feat: update puppet8 version [\#124](https://github.com/voxpupuli/container-puppetserver/pull/124) ([rwaffen](https://github.com/rwaffen))
+- fix: check if import of ca is required [\#123](https://github.com/voxpupuli/container-puppetserver/pull/123) ([tuxmea](https://github.com/tuxmea))
+- feat: update to 7.17.2 and 8.6.2 [\#121](https://github.com/voxpupuli/container-puppetserver/pull/121) ([rwaffen](https://github.com/rwaffen))
+- feat: Allow usage of intermediate CA [\#109](https://github.com/voxpupuli/container-puppetserver/pull/109) ([tuxmea](https://github.com/tuxmea))
+- add ssh client and rugged gem [\#101](https://github.com/voxpupuli/container-puppetserver/pull/101) ([rwaffen](https://github.com/rwaffen))
+
+**Fixed bugs:**
+
+- fix ca ttl setting. [\#146](https://github.com/voxpupuli/container-puppetserver/pull/146) ([tuxmea](https://github.com/tuxmea))
+- Fix: update if-statement causing wrong behavior and fix typo introduce in \#116 [\#117](https://github.com/voxpupuli/container-puppetserver/pull/117) ([sbjzn](https://github.com/sbjzn))
+
+**Closed issues:**
+
+- Container health-check fails after creating a certificate [\#130](https://github.com/voxpupuli/container-puppetserver/issues/130)
+- set -e added to 30-set-permissions.sh causes script failure when using mounted configmap configuration files. [\#126](https://github.com/voxpupuli/container-puppetserver/issues/126)
+- Intermediate CA import crashes container Startup if CA is already imported [\#122](https://github.com/voxpupuli/container-puppetserver/issues/122)
+- Intermediate CA feature update broken [\#116](https://github.com/voxpupuli/container-puppetserver/issues/116)
+- add working container scanning again [\#114](https://github.com/voxpupuli/container-puppetserver/issues/114)
+- puppetserver arm64 - ruby error when submitting report [\#106](https://github.com/voxpupuli/container-puppetserver/issues/106)
+- feature: try to make rugged multi staged buildable [\#102](https://github.com/voxpupuli/container-puppetserver/issues/102)
+- Suggestion: Install SSH client for r10k [\#100](https://github.com/voxpupuli/container-puppetserver/issues/100)
+- Cannot download puppet catalog [\#99](https://github.com/voxpupuli/container-puppetserver/issues/99)
+- \[Improvement\] Add mechanism to import previously generated Intermediate CA certificates [\#94](https://github.com/voxpupuli/container-puppetserver/issues/94)
+
+**Merged pull requests:**
+
+- deprecate repo [\#149](https://github.com/voxpupuli/container-puppetserver/pull/149) ([rwaffen](https://github.com/rwaffen))
+- feat: do multi stage build for ruby gems [\#140](https://github.com/voxpupuli/container-puppetserver/pull/140) ([rwaffen](https://github.com/rwaffen))
+- feat: streamline Dockerfile [\#138](https://github.com/voxpupuli/container-puppetserver/pull/138) ([rwaffen](https://github.com/rwaffen))
+- Fix default argument for PUPPETSERVER\_JAVA\_ARGS in README [\#118](https://github.com/voxpupuli/container-puppetserver/pull/118) ([Heap0017](https://github.com/Heap0017))
+- Update readme and add hint for the new name [\#104](https://github.com/voxpupuli/container-puppetserver/pull/104) ([rwaffen](https://github.com/rwaffen))
+
 ## [v1.6.0](https://github.com/voxpupuli/container-puppetserver/tree/v1.6.0) (2024-07-19)
 
 [Full Changelog](https://github.com/voxpupuli/container-puppetserver/compare/v1.5.0...v1.6.0)
